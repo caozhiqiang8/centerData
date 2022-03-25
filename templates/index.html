@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block  echartsJs %}
+    {{ super() }}
+    <script src="/static/js/publicJs/china.js"></script>
+{% endblock %}
+{% block css %}
+<style type="text/css">
+
+{#加载动画样式#}
+.el-loading-spinner {
+  font-size: 40px;
+}
+.el-loading-mask .el-loading-spinner .el-loading-text {
+  font-size: 16px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+    <div id='map' >
+        <div id='main' style='width:100%;height:850px;margin: 0px auto;'
+             v-loading="loading"
+             element-loading-text="玩了命的加载中，等等吧，别着急啊~我给你讲个笑话：
+             【梦到上帝他说可以满足我一个愿望，我拿出地球仪说要世界和平，他说太难了，换一个吧。我拿出你照片说要这个变美点，他深思一下说：把地球仪拿回来我再看看！..】"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.8)"></div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="static/js/index.js "></script>
+{% endblock %}

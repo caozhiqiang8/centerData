@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>{% block  title %}{% endblock %}</title>
+
+    {% block  echartsJs %}
+        <script src="/static/js/publicJs/echarts.min.js"></script>
+    {% endblock %}
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- VUE  文件 -->
+    <script src="/static/js/publicJs/vue.min.js"></script>
+    <script src="/static/js/publicJs/axios.min.js"></script>
+
+    <!-- element UI -->
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/publicJs/index.js"></script>
+    {#    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">#}
+    {#    <script src="https://unpkg.com/element-ui/lib/index.js"></script>#}
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+{% block navbar %}
+    <div id='navbar' style="background-color:rgb(84, 92, 100);width:100%;height: 60px; ">
+        <div style="width: 1100px;float: right">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+                     background-color="#545c64"
+                     text-color="#fff"
+                     active-text-color="#ffd04b"
+            >
+                <el-menu-item index="1" style="padding:0 40px" @click="toIindex">首页</el-menu-item>
+                <el-menu-item index="2" style="padding:0 40px" disabled >学校信息</el-menu-item>
+                <el-menu-item index="3" style="padding:0 40px" @click="toUserQuery">用户查询</el-menu-item>
+                <el-menu-item index="4" style="padding:0 40px" @click="toTask">作业分析</el-menu-item>
+                <el-menu-item index="5" style="padding:0 40px" disabled>课堂分析</el-menu-item>
+                <el-menu-item index="6" style="padding:0 40px" disabled>用户行为日志</el-menu-item>
+                <el-menu-item index="7" style="padding:0 40px" disabled>图文识别</el-menu-item>
+                <el-submenu index="8">
+                    <template slot="title">更多小秘密</template>
+                    <el-menu-item index="2-1">敬请期待</el-menu-item>
+                    <el-menu-item index="2-2">敬请期待</el-menu-item>
+                    <el-menu-item index="2-3">敬请期待</el-menu-item>
+
+                </el-submenu>
+            </el-menu>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tabs %}{% endblock %}
+
+
+{% block body %}{% endblock %}
+
+{% block navbarJs %}
+    <script type="text/javascript ">
+        var navbar = new Vue({
+            el: '#navbar',
+            delimiters: ['[[', ']]'],
+            data: {
+                activeIndex: '',
+            },
+            methods: {
+                handleSelect(key, keyPath) {
+                    if (window.location.pathname === '/index') {
+                        this.activeIndex = '1'
+                    }
+                    if (window.location.pathname === '/userQuery') {
+                        this.activeIndex = '3'
+                    }
+                    if (window.location.pathname === '/task') {
+                        this.activeIndex = '4'
+                    }
+
+                },
+
+                toIindex: function () {
+                    window.location= 'index'
+                },
+                toUserQuery: function () {
+                    window.location = 'userQuery'
+                },
+                toTask: function () {
+                    window.location = 'task'
+                }
+            },
+            created() {
+                this.handleSelect()
+            }
+
+        })
+
+    </script>
+{% endblock %}
+
+{% block js %}{% endblock %}
+</body>
+</html>

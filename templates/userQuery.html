@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}用户查询{% endblock %}
+
+{% block  echartsJs %}
+{% endblock %}
+
+{% block body %}
+    <div id="userQuery" style="margin: 50px 200px">
+
+        <el-form ref="form" :model="form" label-width="100px" style="width: 500px">
+
+            <el-form-item label="教师用户名">
+                <el-input v-model="form.teaName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="学生用户名">
+                <el-input v-model="form.stuName"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="getUser">查询</el-button>
+            </el-form-item>
+
+        </el-form>
+        <p style="color: red;">[[msg]]</p>
+
+
+        <div style="margin-top: 50px">
+            <template>
+                <el-table
+                        :data="usrInfo"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        empty-text="点击查询按钮查询数据"
+                        element-loading-background="rgba(0, 0, 0, 0.5)"
+                >
+
+                    <el-table-column prop="name" label="学校名称" sortable></el-table-column>
+
+                    <el-table-column prop="school_id" label="学校ID" sortable></el-table-column>
+
+                    <el-table-column prop="ett_user_id" label="JID" sortable></el-table-column>
+
+                    <el-table-column prop="user_name" label="用户名" sortable></el-table-column>
+
+                    <el-table-column prop="password" label="密码" sortable></el-table-column>
+
+                    <el-table-column prop="real_name" label="真实姓名" sortable></el-table-column>
+
+                    <el-table-column prop="state_id" label="有效状态" sortable></el-table-column>
+
+                    <el-table-column prop="c_time" label="创建时间" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script src="static/js/userQuery.js"></script>
+{% endblock %}

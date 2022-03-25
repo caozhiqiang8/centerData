@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+
+{% block  echartsJs %}{% endblock %}
+
+{% block css %}
+    <style type="text/css">
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            padding: 18px 0;
+        }
+
+    </style>
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block body %}
+    <div id="login" style="display: flex;justify-content: center;margin-top: 200px">
+
+        <el-card class="box-card" style="width: 600px;height: 300px">
+            <div slot="header" class="clearfix">
+                <span>欢迎登录</span>
+            </div>
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-form-item label="用户名：">
+                    <el-input v-model="form.userName"></el-input>
+                </el-form-item>
+                <el-form-item label="密码：">
+                    <el-input v-model="form.passWord"></el-input>
+                </el-form-item>
+                <p style="color: red;font-size: 16px">[[ masg ]]</p>
+                <el-form-item>
+                    <el-button type="primary" style="width: 200px;margin-left: 100px" @click="login">登录</el-button>
+                </el-form-item>
+
+            </el-form>
+        </el-card>
+    </div>
+
+{% endblock %}
+
+{% block navbarJs %}{% endblock %}
+
+{% block js %}
+    <script src="static/js/login.js "></script>
+{% endblock %}
