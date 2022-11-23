@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}作业分析{% endblock %}
+
+{% block tabs %}{% endblock %}
+
+{% block body %}
+
+    {% for i in range(data.title | length) %}
+        <div id="{{ i }}" style="width: 1500px;height: 500px;margin:50px auto"></div>
+    {% endfor %}
+
+
+    {% block js %}
+
+        <script type="text/javascript">
+
+            {% for i in range(data.title | length) %}
+                var myChart = echarts.init(document.getElementById('{{ i }}'));
+                option = {
+                    title: {
+                        text: '{{ data.title[i] | safe }}'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: {{ data.legend | safe }}
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['line', 'bar']},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+
+                    xAxis: {
+                        type: 'category',
+                        axisLabel: {
+                            //x轴文字的配置
+                            show: true,
+                            interval: 0,//使x轴文字显示全
+                            rotate: 60
+                        },
+                        data: {{ data.xdata | safe }},
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '{{ data.legend[0] | safe }}',
+
+                            data: {{ data.ydata[0][i] | safe }},
+                            type: 'bar',
+                            itemStyle: {
+                                color: '#d7d7d7'
+                            },
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                        },
+                        // 本校
+                        {
+                            name: '{{ data.legend[1] | safe }}',
+                            data:{{ data.ydata[1] | safe }},
+                            type: 'line',
+                            itemStyle: {
+                                color: '#d5c20c'
+                            },
+
+                        },
+                        //最高
+                        {
+                            name: '{{ data.legend[2] | safe }}',
+                            data: {{ data.ydata[2] | safe }},
+                            type: 'line',
+                            itemStyle: {
+                                color: '#06c125'
+                            },
+                        },
+                        // 最低
+                        {
+                            name: '{{ data.legend[3] | safe }}',
+                            data:{{ data.ydata[3] | safe }},
+                            type: 'line',
+                            itemStyle: {
+                                color: '#D9001B'
+                            },
+                        },
+                    ]
+                };
+                myChart.setOption(option);
+
+            {% endfor %}
+
+        </script>
+    {% endblock %}
+{% endblock %}
