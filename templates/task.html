@@ -16,57 +16,104 @@
         {# 二级导航 #}
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="平台每日作业情况" name="first"></el-tab-pane>
-                <el-tab-pane label="学校每日作业情况" name="second"></el-tab-pane>
-                <el-tab-pane label="期待" name="third"></el-tab-pane>
+                <el-tab-pane label="作业总览" name="first"></el-tab-pane>
+                <el-tab-pane label="学校作业情况" name="second"></el-tab-pane>
+                <el-tab-pane label="最近7天学校作业情况" name="third"></el-tab-pane>
                 <el-tab-pane label="期待" name="fourth"></el-tab-pane>
             </el-tabs>
         </template>
+        {# 学校每日作业详情 #}
+        <p v-show='pageHeaderShow'>[[pageHeaderName ]]</p>
 
-        {# 平台每次作业 #}
+        {# 作业总览 #}
         <div id='main' style='width:1600px;height:700px;margin: 0px auto;' v-show='taskCountShow'
              v-loading="loading"
              element-loading-text="玩了命的加载中，等等吧，别着急啊~"
              element-loading-spinner="el-icon-loading"
              element-loading-background="rgba(0, 0, 0, 0.8)">
-
         </div>
 
-    </div>
+        {# 学校每日作业情况 #}
+        <p v-show='schoolCountShow'>学校总数：[[schoolCount ]]</p>
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="schoolTaskCount"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        empty-text="玩了命的加载中....."
+                        element-loading-background="rgba(0, 0, 0, 0.5)"
+                        v-show='schoolTaskShow'
+                        :height='windowsHeight'
+                >
+                    <el-table-column prop="school_id" label="ID" sortable>
+                        <template slot-scope="scope">
+                            <p style="color: blue" @click="getSchoolDayTask(scope.row.school_id,scope.row.name)"> [[
+                                scope.row.school_id ]]</p>
+                        </template>
+                    </el-table-column>
 
-    {# 学校学期任务使用情况 #}
-    <div style="margin-top: 50px">
-        <template>
-            <el-table
-                    :data="schoolTaskCount"
-                    border
-                    stripe
-                    style="width: 100%"
-                    :default-sort="{prop: 'date', order: 'descending'}"
-                    empty-text="加载中....."
-                    element-loading-background="rgba(0, 0, 0, 0.5)"
-                    v-show='schoolTaskShow'
-            >
-                <el-table-column prop="school_id" label="ID" sortable></el-table-column>
-                <el-table-column prop="name" label="学校" sortable></el-table-column>
-                <el-table-column prop="xzy" label="学资源" sortable></el-table-column>
-                <el-table-column prop="tl" label="讨论" sortable></el-table-column>
-                <el-table-column prop="wkc" label="微课程" sortable></el-table-column>
-                <el-table-column prop="yb" label="yb任务" sortable></el-table-column>
-                <el-table-column prop="zbk" label="直播课" sortable></el-table-column>
-                <el-table-column prop="gxh" label="个性化" sortable></el-table-column>
-                <el-table-column prop="xs" label="先声" sortable></el-table-column>
-                <el-table-column prop="new_dtk" label="答题卡" sortable></el-table-column>
-                <el-table-column prop="dtk_lxc" label="练习册" sortable></el-table-column>
-                <el-table-column prop="dtk_fj" label="附件" sortable></el-table-column>
-                <el-table-column prop="dtk_sj" label="试卷" sortable></el-table-column>
-                <el-table-column prop="zuoye_count" label="总数" sortable></el-table-column>
-                <el-table-column prop="axp" label="归档" sortable></el-table-column>
+                    <el-table-column prop="name" label="学校" sortable></el-table-column>
+                    <el-table-column prop="xzy" label="学资源" sortable></el-table-column>
+                    <el-table-column prop="tl" label="讨论" sortable></el-table-column>
+                    <el-table-column prop="wkc" label="微课程" sortable></el-table-column>
+                    <el-table-column prop="yb" label="yb任务" sortable></el-table-column>
+                    <el-table-column prop="zbk" label="直播课" sortable></el-table-column>
+                    <el-table-column prop="gxh" label="个性化" sortable></el-table-column>
+                    <el-table-column prop="xs" label="先声" sortable></el-table-column>
+                    <el-table-column prop="new_dtk" label="答题卡" sortable></el-table-column>
+                    <el-table-column prop="dtk_lxc" label="练习册" sortable></el-table-column>
+                    <el-table-column prop="dtk_fj" label="附件" sortable></el-table-column>
+                    <el-table-column prop="dtk_sj" label="试卷" sortable></el-table-column>
+                    <el-table-column prop="zuoye_count" label="总数" sortable></el-table-column>
+                    <el-table-column prop="axp" label="归档" sortable></el-table-column>
 
+                </el-table>
+            </template>
+        </div>
 
-            </el-table>
-        </template>
-    </div>
+        {# 最近7天学校作业情况 #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="schoolWeekTaskCount"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        empty-text="玩了命的加载中....."
+                        element-loading-background="rgba(0, 0, 0, 0.5)"
+                        v-show='schoolWeekTaskCountShow'
+                        :height='windowsHeight'
+                >
+                    <el-table-column prop="school_id" label="ID" sortable>
+                        <template slot-scope="scope">
+                            <p style="color: blue" @click="getSchoolDayTask(scope.row.school_id,scope.row.name)"> [[
+                                scope.row.school_id ]]</p>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="name" label="学校" sortable></el-table-column>
+                    <el-table-column prop="xzy" label="学资源" sortable></el-table-column>
+                    <el-table-column prop="tl" label="讨论" sortable></el-table-column>
+                    <el-table-column prop="wkc" label="微课程" sortable></el-table-column>
+                    <el-table-column prop="yb" label="yb任务" sortable></el-table-column>
+                    <el-table-column prop="zbk" label="直播课" sortable></el-table-column>
+                    <el-table-column prop="gxh" label="个性化" sortable></el-table-column>
+                    <el-table-column prop="xs" label="先声" sortable></el-table-column>
+                    <el-table-column prop="new_dtk" label="答题卡" sortable></el-table-column>
+                    <el-table-column prop="dtk_lxc" label="练习册" sortable></el-table-column>
+                    <el-table-column prop="dtk_fj" label="附件" sortable></el-table-column>
+                    <el-table-column prop="dtk_sj" label="试卷" sortable></el-table-column>
+                    <el-table-column prop="zuoye_count" label="总数" sortable></el-table-column>
+                    <el-table-column prop="axp" label="归档" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+
 
     </div>
 
@@ -74,4 +121,6 @@
 
 {% block js %}
     <script src="static/js/task.js "></script>
+
+
 {% endblock %}

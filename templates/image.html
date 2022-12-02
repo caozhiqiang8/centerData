@@ -2,9 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>图片对比</title>
+    <script src="/static/js/publicJs/echarts.min.js"></script>
+    <script src="/static/js/publicJs/vue.min.js"></script>
+    <script src="/static/js/publicJs/axios.min.js"></script>
+
+    <!-- element UI -->
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/publicJs/index.js"></script>
 </head>
+
 <body>
-$END$
+
+<div class="demo-image__placeholder" id='image'>
+    {% for i in range(data.old_path | length) %}
+        <div class="block" style="width: 49%;float: left">
+            <span class="demonstration"></span>
+            <el-image
+                    :src="'{{ data.old_path[i] }}'"></el-image>
+        </div>
+        <div class="block" style="width: 49%;float: right">
+            <span class="demonstration"></span>
+            <el-image :src="'{{ data.new_name[i] }}'"></el-image>
+        </div>
+    {% endfor %}
+</div>
+
+
+<script>
+    var image = new Vue({
+        el: '#image',
+        delimiters: ['[[', ']]'],
+        data: {},
+    })
+
+</script>
+
+
 </body>
 </html>

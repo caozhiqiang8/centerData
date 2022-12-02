@@ -2,11 +2,19 @@ var tabs = new Vue({
     el: '#task',
     delimiters: ['[[', ']]'],
     data: {
-        activeName: 'first',
-        schoolTaskCount: [],
-        taskCountShow: true,
+        activeName: 'first',//二级导航
+        taskCountShow: true,  //作业总览
+        loading: true, // 加载动画
+        schoolTaskCount: [], //学校每天作业情况
         schoolTaskShow: false,
-        loading: true
+        schoolCount: '', //学校总数
+        schoolCountShow: false,
+        schoolWeekTaskCount: '', //最近7天学校作业情况
+        schoolWeekTaskCountShow: false,
+        pageHeaderName: '',//二级学校名称
+        pageHeaderShow: false,
+        windowsHeight: '200px',
+
     },
     methods: {
         handleClick(tab, event) {
@@ -15,23 +23,33 @@ var tabs = new Vue({
                 this.getTaskCount()
                 this.taskCountShow = true
                 this.schoolTaskShow = false
+                this.schoolCountShow = false
+                this.schoolWeekTaskCountShow = false
                 this.loading = false
+                this.pageHeaderShow = false
             }
             if (tab.name === 'second') {
                 this.getSchoolTask()
                 this.taskCountShow = false
                 this.schoolTaskShow = true
-
+                this.schoolCountShow = true
+                this.schoolWeekTaskCountShow = false
+                this.pageHeaderShow = false
+                this.windowsHeight = document.documentElement.clientHeight - 190
+            }
+            if (tab.name === 'third') {
+                this.getSchoolWeekTask()
+                this.taskCountShow = false
+                this.schoolTaskShow = false
+                this.schoolCountShow = true
+                this.pageHeaderShow = false
+                this.schoolWeekTaskCountShow = true
+                this.windowsHeight = document.documentElement.clientHeight - 190
             }
 
         },
-        getSchoolTask() {
-            axios.get('/getSchoolTaskCount')
-                .then(data => {
-                    this.schoolTaskCount = data.data.schoolTaskCount
-                })
-                .catch(err => (console.log(err)))
-        },
+
+        //作业总览
         getTaskCount() {
             axios.get('/getTaskCount')
                 .then(data => {
@@ -42,6 +60,42 @@ var tabs = new Vue({
                 })
                 .catch(err => (console.log(err)))
         },
+        //获取 学校每天作业情况
+        getSchoolTask() {
+            axios.get('/getSchoolTaskCount?code=1')
+                .then(data => {
+                    this.schoolTaskCount = data.data.schoolTaskCount
+                    this.schoolCount = data.data.schoolCount
+                })
+                .catch(err => (console.log(err)))
+        },
+        getSchoolWeekTask() {
+            axios.get('/getSchoolTaskCount?code=2')
+                .then(data => {
+                    this.schoolWeekTaskCount = data.data.schoolWeekTaskCount
+                    this.schoolCount = data.data.schoolCount
+                })
+                .catch(err => (console.log(err)))
+        },
+        // 获取学校每日作业情况数据
+        getSchoolDayTask(school_id, name) {
+            console.log(school_id, name)
+            // window.location.href = '/task?schoolId=' + school_id
+            this.pageHeaderName = name
+            axios.get('/getTaskCount?schoolId=' + school_id)
+                .then(data => {
+                    this.taskCountShow = true
+                    this.schoolTaskShow = false
+                    this.pageHeader = true
+                    this.echartsNames = data.data.type_name
+                    this.echartslineX = data.data.x_date
+                    this.echartsValue = data.data.y_list
+                    this.$options.methods.taskCountEycharts(this.echartsNames, this.echartslineX, this.echartsValue)
+                })
+                .catch(err => (console.log(err)))
+        },
+
+        // 平台每日作业情况数据----折线图
         taskCountEycharts(echartsNames, echartslineX, echartsValue) {
             var myChart = echarts.init(document.getElementById('main'));
             var charts = {
@@ -131,6 +185,21 @@ var tabs = new Vue({
                     trigger: 'axis',
                 },
 
+                // 工具箱
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
+                    },
+                    top: 50
+                },
+
                 legend: {
                     top: '2%',
                     itemStyle: {
@@ -170,7 +239,7 @@ var tabs = new Vue({
                     height: 30,
                     xAxisIndex: [0],
                     bottom: 30,
-                    "start": 95,
+                    "start": 85,
                     "end": 100,
                     handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
                     handleSize: '110%',
@@ -208,7 +277,7 @@ var tabs = new Vue({
                         show: false,
                     },
                     axisLabel: {
-                        interval:0,//代表显示所有x轴标签显示
+                        interval: 0,//代表显示所有x轴标签显示
                         rotate: 60,
                         textStyle: {
                             color: '#000',
@@ -274,7 +343,7 @@ var tabs = new Vue({
 
     },
     mounted() {
-        this.getTaskCount()
+        this.getTaskCount();
     }
 
 })

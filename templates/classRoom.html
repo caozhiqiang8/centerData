@@ -1,10 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}作业分析{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block tabs %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="classRoom" style="margin: 50px 200px">
+        {# 二级导航 #}
+        <template>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="爱学派班级" name="first"></el-tab-pane>
+                <el-tab-pane label="爱学派班级详情" name="second"></el-tab-pane>
+                <el-tab-pane label="期待" name="third"></el-tab-pane>
+                <el-tab-pane label="期待" name="fourth"></el-tab-pane>
+            </el-tabs>
+        </template>
+
+        <p> 有效爱学派班级总数:[[axpClassCount]]&nbsp;本学期续费班级数:[[axpClassRenewCount]]&nbsp;本学期新开班级数：[[axpClassNewCount]]</p>
+        {#   练习册情况列表     #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="axpSchool"
+                        border
+                        stripe
+                        style="width: 100%"
+                        empty-text="玩了命的加载中....."
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show="axpSchoolShow"
+
+                >
+                    <el-table-column prop="school_id" label="学校ID" sortable></el-table-column>
+                    <el-table-column prop="name" label="学校名称" sortable></el-table-column>
+                    <el-table-column prop="class_id" label="有效爱学派班级数" sortable></el-table-column>
+
+
+                </el-table>
+            </template>
+        </div>
+
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="axpClass"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show="axpClassShow"
+                        empty-text="玩了命的加载中....."
+                >
+                    <el-table-column prop="school_id" label="学校ID" sortable></el-table-column>
+                    <el-table-column prop="name" label="学校名称" sortable></el-table-column>
+                    <el-table-column prop="class_id" label="班级ID" sortable></el-table-column>
+                    <el-table-column prop="class_name" label="班级名称" sortable></el-table-column>
+                    <el-table-column prop="year" label="学年" sortable></el-table-column>
+                    <el-table-column prop="axp_begin_time" label="开始时间" sortable></el-table-column>
+                    <el-table-column prop="axp_end_time" label="结束时间" sortable></el-table-column>
+
+
+                </el-table>
+            </template>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="static/js/classRoom.js "></script>
+
+
+{% endblock %}

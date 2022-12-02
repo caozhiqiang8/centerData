@@ -1,10 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}学校分析{% endblock %}
+
+
+{% block css %}
+    <style>
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            padding: 18px 0;
+        }
+
+        .box-card {
+            width: 1400px;
+        }
+    </style>
+{% endblock %}
+
+{% block tabs %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="task" style="margin: 50px 200px">
+        {# 二级导航 #}
+        <template>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="学校类型" name="first"></el-tab-pane>
+                <el-tab-pane label="学校作业情况" name="second"></el-tab-pane>
+                <el-tab-pane label="期待" name="third"></el-tab-pane>
+                <el-tab-pane label="期待" name="fourth"></el-tab-pane>
+            </el-tabs>
+        </template>
+
+        <el-card class="box-card">
+            <div id="schoolType" style='width:1400px;height:700px;margin: 0px auto;'></div>
+        </el-card>
+
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="static/js/school.js "></script>
+
+
+{% endblock %}

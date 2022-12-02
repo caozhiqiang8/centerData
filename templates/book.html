@@ -1,10 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}作业分析{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block tabs %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="book" style="margin: 50px 200px">
+        {# 二级导航 #}
+        <template>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="练习册信息" name="first"></el-tab-pane>
+                <el-tab-pane label="练习册年级学科录入情况" name="second"></el-tab-pane>
+                <el-tab-pane label="练习册开通情况" name="third"></el-tab-pane>
+                <el-tab-pane label="学校开通情况" name="fourth"></el-tab-pane>
+            </el-tabs>
+        </template>
+
+        <p> 练习册总数:[[bookCount ]]&nbsp;试卷总数:[[bookPaperCount]]&nbsp;学校开通数:[[schoolCount]]</p>
+        {#   练习册情况列表     #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="bookInfo"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show='bookInfoShow'
+                >
+                    <el-table-column prop="book_id" label="练习册ID" sortable></el-table-column>
+                    <el-table-column prop="book_name" label="练习册名称" sortable></el-table-column>
+                    <el-table-column prop="grade_name" label="年级" sortable></el-table-column>
+                    <el-table-column prop="subject_name" label="学科" sortable></el-table-column>
+                    <el-table-column prop="version_name" label="版本" sortable></el-table-column>
+                    <el-table-column prop="material_name" label="教材" sortable></el-table-column>
+                    <el-table-column prop="c_time" label="创建时间" sortable></el-table-column>
+                    <el-table-column prop="paper_count" label="试卷数" sortable></el-table-column>
+
+
+                </el-table>
+            </template>
+        </div>
+
+        {#   练习册年级学科录入情况     #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="bookGradeSubject"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show='bookGradeSubjectShow'
+                >
+                    <el-table-column prop="grade_name" label="年级" sortable></el-table-column>
+                    <el-table-column prop="subject_name" label="学科" sortable></el-table-column>
+                    <el-table-column prop="book_id" label="练习册数量" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+
+        {#   练习册开通情况     #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="bookSchool"
+                        border
+                        stripe
+                        style="width: 100%"
+                        empty-text="玩了命的加载中....."
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show='bookSchoolShow'
+                >
+                    <el-table-column prop="book_id" label="练习册ID" sortable></el-table-column>
+                    <el-table-column prop="book_name" label="练习册名称" sortable></el-table-column>
+                    <el-table-column prop="grade_name" label="年级" sortable></el-table-column>
+                    <el-table-column prop="subject_name" label="学科" sortable></el-table-column>
+                    <el-table-column prop="version_name" label="版本" sortable></el-table-column>
+                    <el-table-column prop="material_name" label="教材" sortable></el-table-column>
+                    <el-table-column prop="name" label="学校" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+
+        {#   学校开通情况     #}
+        <div style="margin-top: 20px">
+            <template>
+                <el-table
+                        :data="schoolBook"
+                        border
+                        stripe
+                        style="width: 100%"
+                        empty-text="玩了命的加载中....."
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show='schoolBookShow'
+                >
+                    <el-table-column prop="school_id" label="学校ID" sortable></el-table-column>
+                    <el-table-column prop="name" label="学校名称" sortable></el-table-column>
+                    <el-table-column prop="book_name" label="练习册" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="static/js/book.js "></script>
+
+
+{% endblock %}

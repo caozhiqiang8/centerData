@@ -7,6 +7,9 @@
 
     {% block  echartsJs %}
         <script src="/static/js/publicJs/echarts.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
     {% endblock %}
 
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,26 +29,28 @@
 
 {% block navbar %}
     <div id='navbar' style="background-color:rgb(84, 92, 100);width:100%;height: 60px; ">
-        <div style="width: 1100px;float: right">
+        <div style="float: right">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
                      background-color="#545c64"
                      text-color="#fff"
                      active-text-color="#ffd04b"
             >
                 <el-menu-item index="1" style="padding:0 40px" @click="toIindex">首页</el-menu-item>
-                <el-menu-item index="2" style="padding:0 40px" disabled >学校信息</el-menu-item>
+                <el-menu-item index="2" style="padding:0 40px" @click="toSchool">学校分析</el-menu-item>
                 <el-menu-item index="3" style="padding:0 40px" @click="toUserQuery">用户查询</el-menu-item>
                 <el-menu-item index="4" style="padding:0 40px" @click="toTask">作业分析</el-menu-item>
-                <el-menu-item index="5" style="padding:0 40px" disabled>课堂分析</el-menu-item>
-                <el-menu-item index="6" style="padding:0 40px" disabled>用户行为日志</el-menu-item>
-                <el-menu-item index="7" style="padding:0 40px" disabled>图文识别</el-menu-item>
-                <el-submenu index="8">
-                    <template slot="title">更多小秘密</template>
-                    <el-menu-item index="2-1">敬请期待</el-menu-item>
-                    <el-menu-item index="2-2">敬请期待</el-menu-item>
-                    <el-menu-item index="2-3">敬请期待</el-menu-item>
+                <el-menu-item index="5" style="padding:0 40px" @click="toBook">练习册分析</el-menu-item>
+                <el-menu-item index="6" style="padding:0 40px" @click="toClassRoom">课堂分析</el-menu-item>
+                <el-menu-item index="7" style="padding:0 40px" @click="toMonitor">数据监控</el-menu-item>
 
-                </el-submenu>
+            {#                <el-menu-item index="8" style="padding:0 40px" disabled>图文识别</el-menu-item>#}
+            <el-submenu index="9">
+                <template slot="title">考试分析</template>
+                <el-menu-item index="2-1" @click="toExamQues">试题聚类分析</el-menu-item>
+                <el-menu-item index="2-2" @click="toExamSankey">桑基流量图</el-menu-item>
+                <el-menu-item index="2-3" @click="toExamLine">五科5分段</el-menu-item>
+
+            </el-submenu>
             </el-menu>
         </div>
     </div>
@@ -70,24 +75,68 @@
                     if (window.location.pathname === '/index') {
                         this.activeIndex = '1'
                     }
+                     if (window.location.pathname === '/school') {
+                        this.activeIndex = '2'
+                    }
                     if (window.location.pathname === '/userQuery') {
                         this.activeIndex = '3'
                     }
                     if (window.location.pathname === '/task') {
                         this.activeIndex = '4'
                     }
+                    if (window.location.pathname === '/book') {
+                        this.activeIndex = '5'
+                    }
+                    if (window.location.pathname === '/classRoom') {
+                        this.activeIndex = '6'
+                    }
+                    if (window.location.pathname === '/monitor') {
+                        this.activeIndex = '7'
+                    }
+                    if (window.location.pathname === '/examQues') {
+                        this.activeIndex = '2-1'
+                    }
+                    if (window.location.pathname === '/examSankey') {
+                        this.activeIndex = '2-2'
+                    }
+                    if (window.location.pathname === '/examLine') {
+                        this.activeIndex = '2-3'
+                    }
 
                 },
 
                 toIindex: function () {
-                    window.location= 'index'
+                    window.location = 'index'
+                },
+                toSchool: function () {
+                    window.location = 'school'
                 },
                 toUserQuery: function () {
                     window.location = 'userQuery'
                 },
                 toTask: function () {
                     window.location = 'task'
-                }
+                },
+                toBook: function () {
+                    window.location = 'book'
+                },
+                toClassRoom: function () {
+                    window.location = 'classRoom'
+                },
+                toExamQues: function () {
+                    window.location = 'examQues'
+                },
+                toExamSankey: function () {
+                    window.location = 'examSankey'
+                },
+                toExamLine: function () {
+                    window.location = 'examLine'
+                },
+                toMonitor: function () {
+                    window.location = 'monitor'
+                },
+
+
             },
             created() {
                 this.handleSelect()

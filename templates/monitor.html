@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}作业分析{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block tabs %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="monitor" style="margin: 50px 200px">
+        {# 二级导航 #}
+        <template>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="行为日志" name="first"></el-tab-pane>
+                <el-tab-pane label="接口调用" name="second"></el-tab-pane>
+                <el-tab-pane label="url分析" name="third"></el-tab-pane>
+                <el-tab-pane label="响应时长" name="fourth"></el-tab-pane>
+            </el-tabs>
+        </template>
+
+        {#        用户行为日志#}
+        <div style="margin-top: 20px" v-show="userActionShow">
+            <div style="width: 300px">
+                <el-row>
+                    <el-input v-model="jid" placeholder="请输入JID" style="width: 220px"></el-input>
+                    <el-button type="primary" style="float: right" @click="onSubmit">查询</el-button>
+                </el-row>
+            </div>
+
+            <template>
+                <el-table
+                        style="margin-top: 20px"
+                        :data="userAction"
+                        border
+                        stripe
+                        style="width: 100%"
+                        empty-text="点击查询用户行为，数据较大请耐心等待..."
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-show="userActionShow"
+                        v-loading="loading"
+                        element-loading-text="拼命加载中"
+                >
+                    <el-table-column prop="c_time" label="时间" sortable></el-table-column>
+                    <el-table-column prop="ip" label="ip" sortable></el-table-column>
+                    <el-table-column prop="param_json" label="参数" sortable></el-table-column>
+                    <el-table-column prop="model_name" label="项目" sortable></el-table-column>
+                    <el-table-column prop="url" label="路径" sortable></el-table-column>
+                    <el-table-column prop="userAgent" label="来源" sortable></el-table-column>
+                    <el-table-column prop="cost_time" label="花费时长" sortable></el-table-column>
+
+                </el-table>
+            </template>
+        </div>
+        {#    接口调用  #}
+        <div style="margin-top: 20px" v-show="urlDataShow">
+            <template>
+                <div class="block" style="width: 300px">
+                    <el-date-picker
+                            v-model="date"
+                            type="date"
+                            placeholder="选择日期"
+                            format="yyyy-MM-dd"
+                            value-format="yyyyMMdd">
+                    </el-date-picker>
+                    <el-row style="float: right">
+                        <el-button type="primary" @click="getUrlData">查询</el-button>
+                    </el-row>
+                </div>
+
+            </template>
+            <template>
+                <el-table
+                        style="margin-top: 20px"
+                        :data="urlData"
+                        border
+                        stripe
+                        style="width: 100%"
+                        empty-text="点击查询用户行为，数据较大请耐心等待..."
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        v-loading="loading"
+                        element-loading-text="拼命加载中"
+                >
+                    <el-table-column prop="key" label="地址" sortable></el-table-column>
+                    <el-table-column prop="doc_count" label="访问次数" sortable></el-table-column>
+                    <el-table-column prop="sum_user.value" label="访问人数" sortable></el-table-column>
+                    <el-table-column prop="sum_time.value" label="一共用时" sortable></el-table-column>
+                    <el-table-column prop="avg_time.value" label="平均用时" sortable></el-table-column>
+                </el-table>
+            </template>
+        </div>
+
+        {#  url分析  #}
+        <div id='urlBox' style="width:1600px;height:700px;margin: 0px auto;" v-show="urlBoxShow"></div>
+
+        {#       平台一天运维数据   #}
+        <div style="margin-top: 20px" v-show="urlCostTimeShow">
+            <div style="width: 680px">
+                <template>
+                    <div class="block" style="float: left;margin-right: 20px">
+                        <el-date-picker
+                                v-model="date"
+                                type="date"
+                                placeholder="选择日期"
+                                format="yyyy-MM-dd"
+                                value-format="yyyyMMdd">
+                        </el-date-picker>
+                    </div>
+                </template>
+
+                <template>
+                    <el-time-picker
+                            is-range
+                            v-model="time"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            placeholder="选择时间范围"
+                            value-format="HH:mm:ss"
+                    >
+
+                    </el-time-picker>
+
+                </template>
+                <el-button type="primary" style="float: right" @click="getConstTimeData">查询</el-button>
+
+            </div>
+
+            <div id="urlCostTime" style='width:1600px;height:700px;margin: 0px auto;'
+                 v-loading="loading"
+                 element-loading-text="拼命加载中"
+            >
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="static/js/monitor.js"></script>
+
+
+{% endblock %}

@@ -55,6 +55,7 @@ var map = new Vue({
                 '新疆': [86.61, 40.79],
             };
 
+            var d6 = data.y22_23;
             var d5 = data.y21_22;
             var d4 = data.y20_21;
             var d3 = data.y19_20;
@@ -69,8 +70,9 @@ var map = new Vue({
             ];
             var colorIndex = 1;
             $(function () {
-                var year = ["17_18", "18_19", "19_20", "20_21", "21_22"];
+                var year = ["17_18", "18_19", "19_20", "20_21", "21_22","22_23"];
                 var mapData = [
+                    [],
                     [],
                     [],
                     [],
@@ -108,6 +110,11 @@ var map = new Vue({
                         "name": key,
                         "value": d5[key],
                     });
+                    mapData[5].push({
+                        "year": '22_23',
+                        "name": key,
+                        "value": d6[key],
+                    });
 
                 }
 
@@ -144,7 +151,7 @@ var map = new Vue({
                             data: year,
                             axisType: 'category',
                             autoPlay: true,
-                            playInterval: 3000,
+                            playInterval: 5000,
                             left: '5%',
                             right: '15%',
                             bottom: '1%',
