@@ -2,18 +2,20 @@ from elasticsearch import Elasticsearch
 import json
 import pandas as pd
 from public.db_con import mysql_connect
+from datetime import  datetime
 
 def esConnect(index,body):
 
-    es_hosts = str("52.82.47.234,52.83.95.66").split(",")
+    es_hosts = str("69.230.239.155,43.192.117.34").split(",")
     es = Elasticsearch(es_hosts)
     res = es.search(index=index, body=body)
     res = json.loads(json.dumps(res))
     return  res
 
 index = "two_month_action_logs"
-b_time = "2022-09-01 00:00:00"
-e_time = "2022-09-30 23:59:59"
+b_time = "2022-11-01 00:00:00"
+e_time = "2022-11-30 23:59:59"
+
 school_id = 51156
 
 body = '''{
@@ -116,5 +118,5 @@ stu_res = pd.merge(stu_info,df_merge,on='JID',how='left')
 stu_res = stu_res.fillna(0)
 
 print(stu_res)
-stu_res.to_excel(r'C:\Users\caozhiqiang\Desktop\{}学生资源使用数据.xlsx'.format(school_id))
+stu_res.to_excel(r'C:\Users\caozhiqiang\Desktop\11月份{}学生资源使用数据.xlsx'.format(school_id))
 print('导出成功')

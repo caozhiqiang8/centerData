@@ -1,4 +1,5 @@
 import pandas as pd
+import  os
 from flask import Flask, render_template, send_from_directory
 from flask_compress import Compress
 from datetime import timedelta
@@ -11,6 +12,7 @@ from practise import  practise_book_blue
 from axp_class import  axp_class_blue
 from monitor import  monitor_blue
 from exam import  exam_blue
+from pad_license import pad_license_blue
 
 app = Flask(__name__)
 app.register_blueprint(login_blue)
@@ -22,9 +24,13 @@ app.register_blueprint(practise_book_blue)
 app.register_blueprint(axp_class_blue)
 app.register_blueprint(monitor_blue)
 app.register_blueprint(exam_blue)
+app.register_blueprint(pad_license_blue)
 
 app.config["SECRET_KEY"] = "akjsdhkjashdkjhaksk120191101asd"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60 * 8)
+
+# app.config['UPLOAD_FOLDER'] = './static/file'
+
 Compress(app)
 
 

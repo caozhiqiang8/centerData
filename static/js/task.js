@@ -87,6 +87,7 @@ var tabs = new Vue({
                     this.taskCountShow = true
                     this.schoolTaskShow = false
                     this.pageHeader = true
+                    this.schoolWeekTaskCountShow = false
                     this.echartsNames = data.data.type_name
                     this.echartslineX = data.data.x_date
                     this.echartsValue = data.data.y_list

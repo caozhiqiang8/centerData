@@ -30,16 +30,40 @@
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="学校类型" name="first"></el-tab-pane>
-                <el-tab-pane label="学校作业情况" name="second"></el-tab-pane>
+                <el-tab-pane label="学校信息" name="second"></el-tab-pane>
                 <el-tab-pane label="期待" name="third"></el-tab-pane>
                 <el-tab-pane label="期待" name="fourth"></el-tab-pane>
             </el-tabs>
         </template>
 
-        <el-card class="box-card">
+        {#        学校类型    #}
+        <el-card class="box-card" v-show="schoolTypeShow">
             <div id="schoolType" style='width:1400px;height:700px;margin: 0px auto;'></div>
         </el-card>
 
+        {#   学校信息     #}
+        <div style="margin-top: 50px" v-show="schoolInfoShow">
+            <template>
+                <el-table
+                        :data="schooldata"
+                        border
+                        stripe
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                        empty-text="数据加载中......"
+                        element-loading-background="rgba(0, 0, 0, 0.5)"
+                >
+
+                    <el-table-column v-for="column in tableColumns"
+                                     :key="column.prop"
+                                     :prop="column.prop"
+                                     :label="column.label" sortable>
+
+                    </el-table-column>
+
+                </el-table>
+            </template>
+        </div>
 
     </div>
 

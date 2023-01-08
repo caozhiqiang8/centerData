@@ -3,23 +3,53 @@ var tabs = new Vue({
     delimiters: ['[[', ']]'],
     data: {
         activeName: 'first',
+        schooldata: [],
+        schoolTypeShow: true,
+        schoolInfoShow: false,
+        tableColumns: [
+            {
+                prop: "school_id",
+                label: "学校ID",
+            },
+            {
+                prop: "name",
+                label: "学校名称",
+            },
+            {
+                prop: "ip",
+                label: "地址",
+            },
+            {
+                prop: "user_name",
+                label: "用户名",
+            },
+            {
+                prop: "password",
+                label: "密码",
+            },
+
+        ],
     },
     methods: {
         handleClick(tab, event) {
             console.log(tab.name, event);
             if (tab.name === 'first') {
+                this.schoolTypeShow = true
+                this.schoolInfoShow = false
                 this.schooType()
+
             }
             if (tab.name === 'second') {
+                this.schoolTypeShow = false
+                this.schoolInfoShow = true
+                this.schoolInfo()
 
             }
         },
         schooType() {
             axios.get('/schoolCRM')
                 .then(data => {
-                    console.log(data.data.school_crm)
                     data = data.data.school_crm
-
                     this.$options.methods.pie(data)
 
                 })
@@ -30,7 +60,7 @@ var tabs = new Vue({
             var myChart = echarts.init(document.getElementById('schoolType'));
             let bgColor = '#fff';
             let title = '总量';
-            let color = ['#2ca1ff','#0adbfa','#febe13','#65e5dd','#7b2cff','#fd5151','#f071ff', '#85f67a','#0baefd','#fdcd0b','#0bfdab','#ff5353','#ff72cb','#8488ff',];
+            let color = ['#2ca1ff', '#0adbfa', '#febe13', '#65e5dd', '#7b2cff', '#fd5151', '#f071ff', '#85f67a', '#0baefd', '#fdcd0b', '#0bfdab', '#ff5353', '#ff72cb', '#8488ff',];
             let echartData = data;
 
             let formatNumber = function (num) {
@@ -136,6 +166,14 @@ var tabs = new Vue({
 
             myChart.setOption(option);
 
+        },
+        schoolInfo() {
+            axios.get('/schoolInfo')
+                .then(data => {
+                        this.schooldata = data.data.schoolInfo
+                    }
+                )
+                .catch(err => (console.log(err)))
         }
 
     },

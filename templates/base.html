@@ -38,9 +38,10 @@
                 <el-menu-item index="1" style="padding:0 40px" @click="toIindex">首页</el-menu-item>
                 <el-menu-item index="2" style="padding:0 40px" @click="toSchool">学校分析</el-menu-item>
                 <el-menu-item index="3" style="padding:0 40px" @click="toUserQuery">用户查询</el-menu-item>
-                <el-menu-item index="4" style="padding:0 40px" @click="toTask">作业分析</el-menu-item>
-                <el-menu-item index="5" style="padding:0 40px" @click="toBook">练习册分析</el-menu-item>
-                <el-menu-item index="6" style="padding:0 40px" @click="toClassRoom">课堂分析</el-menu-item>
+                <el-menu-item index="4" style="padding:0 40px" @click="toTask">作业数据</el-menu-item>
+                <el-menu-item index="5" style="padding:0 40px" @click="toBook">练习册数据</el-menu-item>
+                <el-menu-item index="6" style="padding:0 40px" @click="toClassRoom">课堂数据</el-menu-item>
+                <el-menu-item index="8" style="padding:0 40px" @click="toLicense">学习机数据</el-menu-item>
                 <el-menu-item index="7" style="padding:0 40px" @click="toMonitor">数据监控</el-menu-item>
 
             {#                <el-menu-item index="8" style="padding:0 40px" disabled>图文识别</el-menu-item>#}
@@ -93,6 +94,9 @@
                     if (window.location.pathname === '/monitor') {
                         this.activeIndex = '7'
                     }
+                    if (window.location.pathname === '/padLicense') {
+                        this.activeIndex = '8'
+                    }
                     if (window.location.pathname === '/examQues') {
                         this.activeIndex = '2-1'
                     }
@@ -134,6 +138,9 @@
                 },
                 toMonitor: function () {
                     window.location = 'monitor'
+                },
+                toLicense: function () {
+                    window.location = 'padLicense'
                 },
 
 

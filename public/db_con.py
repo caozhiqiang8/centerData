@@ -7,7 +7,7 @@ import sqlite3
 
 # 链接ES
 def es_connect(index, body):
-    es_hosts = str("52.82.47.234,52.83.95.66").split(",")
+    es_hosts = str("69.230.239.155,43.192.117.34").split(",")
     es = Elasticsearch(es_hosts)
     res = es.search(index=index, body=body)
     res = json.loads(json.dumps(res))
