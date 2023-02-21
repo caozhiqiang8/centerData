@@ -206,13 +206,20 @@ def task_zp(time):
 
 @cost_time
 def school_info():
-    sql = '''
-        SELECT s.school_id ,s.name,s.province,s.city,s.c_time from franchised_school_info fr ,school_info s 
-        where  fr.school_type in (3,4)  and  fr.school_id > 50000 and s.school_id = fr.school_id
-        ORDER BY s.c_time ASC
+    sql = '''    
+    SELECT s.school_id,s.name,s.province,s.city, fr.c_time , fr.validity_time ,s.ip,uu.user_name,uu.password FROM oracle2utf.coschuser_info uu,user_info u,j_role_user ru,school_info s , franchised_school_info fr 
+        WHERE uu.jid = u.ett_user_id
+        and fr.school_id = s.school_id 
+        and fr.school_type  in (3,4 )
+          AND u.dc_school_id = s.school_id
+          AND u.ref = ru.user_id
+          AND ru.role_id = 4
+        and fr.ENABLE != 1
+          GROUP BY u.user_id
                 '''
     task = mysql_connect(sql)
     write_Sqlite(df=task, if_exists='replace', table_name='school_info')
+
 
 
 @cost_time
@@ -220,7 +227,7 @@ def day_school_task(c_time):
     funs = [task_yb, task_xzy, task_tl, task_dl, task_cy, task_wkc, task_zbk, task_dtk, task_gxh, task_xs, task_axp,
             tas_dtk_lxc, task_dtk_fj, task_dtk_sj, task_hp, task_zp]
 
-    # 现成池子
+    # 线程池子
     threads = []
     # 一个函数一个线程,添加到池子
     for i in funs:
@@ -279,7 +286,7 @@ def year_province_count():
 
 
 if __name__ == '__main__':
-    c_time = "and tt.c_time >= '2022-07-15 00:00:00'"
+    c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
 
     # 同步每天学校任务数
     day_school_task(c_time=c_time)
@@ -291,6 +298,6 @@ if __name__ == '__main__':
     school_info()
 
     #学校crm模型
-    school_crm()
+    # school_crm()
 
 

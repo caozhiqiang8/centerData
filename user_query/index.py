@@ -5,6 +5,9 @@ from user_query import user_query_blue
 import pandas as pd
 import os
 
+
+
+
 # 用户数据查询
 @user_query_blue.route('/userQuery', methods=['get', 'post'])
 def userQuery():
@@ -57,7 +60,7 @@ def schoolQuery():
         sql = '''
         SELECT u.ett_user_id as 'jid',u.user_id ,t.teacher_name as 'name',oc.user_name ,oc.password
         from user_info u , oracle2utf.coschuser_info oc, teacher_info  t  
-        where u.ETT_USER_ID = oc.jid and u.DC_SCHOOL_ID = {} and t.USER_ID = u.ref 
+        where u.ETT_USER_ID = oc.jid and u.DC_SCHOOL_ID = {} and t.USER_ID = u.ref  and u.STATE_ID = 0
         '''.format(schoolId)
         schoolInfo = mysql_connect(sql)
     else:
@@ -65,7 +68,8 @@ def schoolQuery():
             SELECT u.ett_user_id as 'jid',u.user_id ,s.stu_name as 'name' ,ou.user_name ,ou.password,s.stu_no,s.stu_district_no ,c.class_grade ,c.class_name
             from user_info u ,j_class_user jc , class_info  c, oracle2utf.user_info ou, student_info s
             where u.ETT_USER_ID = ou.user_id and u.DC_SCHOOL_ID = {} and jc.class_id = c.class_id and jc.user_id = u.ref  and s.user_id = u.ref and c.year = '2022~2023'
-            ORDER BY c.class_grade,c.class_name               '''.format(schoolId)
+            and u.STATE_ID = 0
+            ORDER BY c.class_grade,c.class_name              '''.format(schoolId)
         schoolInfo = mysql_connect(sql)
 
     schoolInfo = json.loads(schoolInfo.to_json(orient='records', force_ascii=False))

@@ -2,7 +2,7 @@ import json
 
 from school import school_blue
 from flask import render_template
-from public.db_con import sqlite_connect,mysql_connect
+from public.db_con import sqlite_connect, mysql_connect
 
 
 @school_blue.route('/school', methods=['get'])
@@ -29,19 +29,13 @@ def schoolCRM():
 @school_blue.route('/schoolInfo', methods=['get'])
 def schoolInfo():
     sql = '''
-    SELECT s.school_id,s.name,s.ip,uu.user_name,uu.password FROM oracle2utf.coschuser_info uu,user_info u,j_role_user ru,school_info s , franchised_school_info fr 
-    WHERE uu.jid = u.ett_user_id
-    and fr.school_id = s.school_id 
-    and fr.school_type  in (3,4 )
-      AND u.dc_school_id = s.school_id
-      AND u.ref = ru.user_id
-      AND ru.role_id = 4
-      GROUP BY u.user_id
+    select * from school_info
     '''
-    schoolInfo = mysql_connect(sql)
+    schoolInfo = sqlite_connect(sql)
+
     schoolInfo = json.loads(schoolInfo.to_json(orient='records', force_ascii=False))
 
     data = {
-        'schoolInfo':schoolInfo
+        'schoolInfo': schoolInfo
     }
     return data

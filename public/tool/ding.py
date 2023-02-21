@@ -40,7 +40,7 @@ def getSIGN():
     return SignMessage
 
 
-def dingText():
+def dingText(msg):
     """第一: 发送文本-->
     send_text(self,msg,is_at_all=False,at_mobiles=[],at_dingtalk_ids=[],is_auto_at=True)
         msg: 发送的消息
@@ -52,17 +52,15 @@ def dingText():
     SignMessage = getSIGN()
     xiaoDing = DingtalkChatbot(SignMessage)  # 初始化机器人
     at_dingtalk_ids = ['qrkgfhs']
-    xiaoDing.send_text(msg='''
-    蜘蛛深爱着蚂蚁，表达爱意的时候却遭到了拒绝，
-    蜘蛛大吼：为什么？这一切是为了什么
-    蚂蚁胆怯的说：俺妈说了，成天在网上呆着的都不是好人
-    ''',is_at_all=False)
+    xiaoDing.send_text(msg='{}'.format(msg),is_at_all=False)
     return '发送成功'
 
 
-r = json.loads(jokes())
+r = json.loads(jokes())['result'][0]['content']
 
-print(r['result'][0]['content'])
+print(r)
+dingText(r)
+
 
 # def 发送图片():
 #     """第二:发送图片

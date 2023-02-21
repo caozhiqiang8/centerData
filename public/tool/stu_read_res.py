@@ -13,8 +13,9 @@ def esConnect(index,body):
     return  res
 
 index = "two_month_action_logs"
-b_time = "2022-11-01 00:00:00"
-e_time = "2022-11-30 23:59:59"
+mounth = '2023-01'
+b_time = "{}-01 00:00:00".format(mounth)
+e_time = "{}-30 23:59:59".format(mounth)
 
 school_id = 51156
 
@@ -118,5 +119,5 @@ stu_res = pd.merge(stu_info,df_merge,on='JID',how='left')
 stu_res = stu_res.fillna(0)
 
 print(stu_res)
-stu_res.to_excel(r'C:\Users\caozhiqiang\Desktop\11月份{}学生资源使用数据.xlsx'.format(school_id))
+stu_res.to_excel(r'C:\Users\caozhiqiang\Desktop\{}月份{}学生资源使用数据.xlsx'.format(mounth,school_id))
 print('导出成功')

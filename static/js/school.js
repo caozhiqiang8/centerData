@@ -2,10 +2,10 @@ var tabs = new Vue({
     el: '#task',
     delimiters: ['[[', ']]'],
     data: {
-        activeName: 'first',
+        activeName: 'second',
         schooldata: [],
-        schoolTypeShow: true,
-        schoolInfoShow: false,
+        schoolTypeShow: false,
+        schoolInfoShow: true,
         tableColumns: [
             {
                 prop: "school_id",
@@ -14,6 +14,22 @@ var tabs = new Vue({
             {
                 prop: "name",
                 label: "学校名称",
+            },
+            {
+                prop: "province",
+                label: "省",
+            },
+            {
+                prop: "city",
+                label: "市",
+            },
+            {
+                prop: "c_time",
+                label: "创建时间",
+            },
+            {
+                prop: "validity_time",
+                label: "到期时间",
             },
             {
                 prop: "ip",
@@ -178,7 +194,7 @@ var tabs = new Vue({
 
     },
     mounted() {
-        this.schooType()
+        this.schoolInfo()
     }
 
 })
