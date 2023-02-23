@@ -21,10 +21,11 @@ def mysql_connect(sql):
     result = pd.read_sql_query(sql=sql, con=engine)
     return result
 
+sqlit_url = r'D:\DataCenter\DataCenterDB.sqlite3'
 
 # 链接sqlite---dataFrame
 def sqlite_connect(sql):
-    engine = create_engine('sqlite:///F:\\PythonObject\\DataCenterDB.sqlite3')
+    engine = create_engine('sqlite:///{}'.format(sqlit_url))
     result = pd.read_sql(sql=sql, con=engine)
     return result
 
@@ -47,13 +48,13 @@ class SqliteDb(object):
 #  插入数据
 def write_Sqlite(df, table_name, if_exists):
     # if_exists: replace  清空后添加，，append  追加
-    con = sqlite3.connect('F:\\PythonObject\\DataCenterDB.sqlite3')
+    con = sqlite3.connect(sqlit_url)
     rs = con.cursor()
     if table_name == 'day_school_task':
         if if_exists == 'append':
             # 删除数据学期数据 和 空 数据
             del_sql = ''' 
-                    DELETE from day_school_task where date >='2022-07-15'
+                    DELETE from day_school_task where date >='2023-01-15'
                     '''
             rs.execute(del_sql)
             con.commit()

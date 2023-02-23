@@ -75,6 +75,8 @@ URL_COUNT_NUM = 5
 ERR_NUM = 5
 # datafram 切片数量
 ILOC_NUM = 20
+# 需要过滤的接口
+filter_url_list = ['http://school-cloud.ai-classes.com/aixuepad-service33/login.do']
 
 while True:
     now_etime = pd.to_datetime(datetime.datetime.now())
@@ -87,14 +89,11 @@ while True:
     before_index = "action_logs_{}".format(before_btime.strftime("%Y%m%d"))
 
     if now_etime.strftime("%H") >= '03' and now_etime.strftime("%H") <= '23':
-
         now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
         now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
         before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
         before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
         print("---------------------{} 至 {}---------------------".format(now_btime, now_etime))
-        # print(now_btime, now_etime)
-        # print(before_btime, before_etime)
 
         # 系统响应时长 监控
         body1 = '''
@@ -216,13 +215,14 @@ while True:
                         ''' % (before_btime, before_etime, url_list, ES_SERCH_NUM)
         df2 = esSerch(body2, before_index)
         df2.columns = ['url', '昨日访问次数', '昨日访问总时长', '昨日中位数', '昨日访问人数', '昨日平均用时']
-
+        # 合并表格
         df_merge = pd.merge(df1, df2, on='url', how='left')
-        df_merge = df_merge[['url', '今日平均用时', '昨日平均用时', '今日中位数', '昨日中位数', '今日访问次数',
-                             '昨日访问次数', '今日访问总时长', '昨日访问总时长', '今日访问人数', '昨日访问人数']]
+        df_merge = df_merge[['url', '今日平均用时', '昨日平均用时', '今日中位数', '昨日中位数', '今日访问次数','昨日访问次数', '今日访问总时长', '昨日访问总时长', '今日访问人数', '昨日访问人数']]
         df_merge = df_merge.fillna(0)
         df_merge = df_merge.sort_values(by='今日访问总时长', ascending=False)
-
+        # 过滤不需要报警的接口
+        df_merge = df_merge[ ~df_merge['url'].isin(filter_url_list)]
+        # 超时预警计算
         cost_time = df_merge.iloc[:ILOC_NUM, :].loc[:, ['url', '今日平均用时', '今日中位数', '昨日平均用时', '昨日中位数']]
         cost_time_res = cost_time[(cost_time['今日平均用时'] > (cost_time['昨日平均用时'] * COST_NUM)) & cost_time['昨日平均用时'] > 0]
         cost_time_res_dict = cost_time_res.iloc[:, :].to_dict(orient='records')
@@ -291,6 +291,8 @@ while True:
                 ''' % (now_btime, now_etime)
             url_err = esSerch(url_err_body, now_index)
             url_err.columns = ['url', '报错次数']
+            # 过滤不需要报警的接口
+            url_err = url_err[~url_err['url'].isin(filter_url_list)]
             url_err = url_err[url_err['报错次数'] >= ERR_NUM]
             url_err_dict = url_err.iloc[:, :].to_dict(orient='records')
             if len(url_err_dict) > 0:
