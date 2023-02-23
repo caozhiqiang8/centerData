@@ -1,17 +1,16 @@
 import pandas as pd
-import  os
 from flask import Flask, render_template, send_from_directory
 from flask_compress import Compress
 from datetime import timedelta
 from login import login_blue
-from  index import  index_blue
-from  school import  school_blue
-from  user_query import  user_query_blue
-from task import  task_blue
-from practise import  practise_book_blue
-from axp_class import  axp_class_blue
-from monitor import  monitor_blue
-from exam import  exam_blue
+from index import index_blue
+from school import school_blue
+from user_query import user_query_blue
+from task import task_blue
+from practise import practise_book_blue
+from axp_class import axp_class_blue
+from monitor import monitor_blue
+from exam import exam_blue
 from pad_license import pad_license_blue
 
 app = Flask(__name__)
@@ -66,13 +65,14 @@ def image(page):
     print(end)
     return render_template("image.html", data=data)
 
-@app.route('/download',methods = ['get'])
+
+@app.route('/download', methods=['get'])
 def download():
     dir_path = r'C:\Users\caozhiqiang\Desktop'
     file_name = '初三G110.xlsx'
     attachment_filename = 'g10'
-    return send_from_directory(dir_path,file_name,attachment_filename='学校G10.xlsx')
+    return send_from_directory(dir_path, file_name, attachment_filename='学校G10.xlsx')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
-

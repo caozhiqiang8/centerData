@@ -1,3 +1,6 @@
+import datetime
+import time
+
 import pandas as pd
 from public.db_con import mysql_connect, sqlite_connect, write_Sqlite
 from public.df_merge import df_merge
@@ -286,18 +289,23 @@ def year_province_count():
 
 
 if __name__ == '__main__':
-    c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
 
-    # 同步每天学校任务数
-    day_school_task(c_time=c_time)
+    while True:
+        c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
+        now_time = pd.to_datetime(datetime.datetime.now())
 
-    # 计算学年省市学校数
-    year_province_count()
+        if now_time.strftime("%H") >= '05' and now_time.strftime("%H") <= '20':
+            # 同步每天学校任务数
+            day_school_task(c_time=c_time)
 
-    # 学校列表
-    school_info()
+            # 计算学年省市学校数
+            year_province_count()
 
-    #学校crm模型
-    # school_crm()
+            # 学校列表
+            school_info()
 
+            #学校crm模型
+            school_crm()
+        print("---------------------{}:同步完成---------------------".format(now_time))
+        time.sleep(60*60*2)
 
