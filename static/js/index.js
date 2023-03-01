@@ -1,14 +1,14 @@
 var map = new Vue({
     el: '#map',
     delimiters: ['[[', ']]'],
-    data:{
-      loading:true
+    data: {
+        loading: true
     },
     methods: {
         getMap() {
             axios.get('/getMap')
                 .then(data => {
-                        this.loading = true
+                    this.loading = true
                     this.data = data.data
                     this.$options.methods.mapEcharts(this.data)
                     this.loading = false
@@ -55,12 +55,19 @@ var map = new Vue({
                 '新疆': [86.61, 40.79],
             };
 
-            var d6 = data.y22_23;
-            var d5 = data.y21_22;
-            var d4 = data.y20_21;
-            var d3 = data.y19_20;
-            var d2 = data.y18_19;
-            var d1 = data.y17_18;
+
+            var d12 = data.y22_23_2;
+            var d11 = data.y22_23_1;
+            var d10 = data.y21_22_2;
+            var d9 = data.y21_22_1;
+            var d8 = data.y20_21_2;
+            var d7 = data.y20_21_1;
+            var d6 = data.y19_20_2;
+            var d5 = data.y19_20_1;
+            var d4 = data.y18_19_2;
+            var d3 = data.y18_19_1;
+            var d2 = data.y17_18_2;
+            var d1 = data.y17_18_1;
 
 
             var colors = [
@@ -70,8 +77,14 @@ var map = new Vue({
             ];
             var colorIndex = 1;
             $(function () {
-                var year = ["17_18", "18_19", "19_20", "20_21", "21_22","22_23"];
+                var year = ["y17_18上", "y17_18下", "y18_19上", "y18_19下", "y19_20上", "y19_20下", "y20_21上", "y20_21下", "y21_22上", "y21_22下", "y22_23上", "y22_23下"];
                 var mapData = [
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
                     [],
                     [],
                     [],
@@ -86,34 +99,64 @@ var map = new Vue({
 
                 for (var key in geoCoordMap) {
                     mapData[0].push({
-                        "year": '17_18',
+                        "year": year[0],
                         "name": key,
                         "value": d1[key],
                     });
                     mapData[1].push({
-                        "year": '18_19',
+                        "year": year[1],
                         "name": key,
                         "value": d2[key],
                     });
                     mapData[2].push({
-                        "year": '19_20',
+                        "year": year[2],
                         "name": key,
                         "value": d3[key],
                     });
                     mapData[3].push({
-                        "year": '20_21',
+                        "year": year[3],
                         "name": key,
                         "value": d4[key],
                     });
                     mapData[4].push({
-                        "year": '21_22',
+                        "year": year[4],
                         "name": key,
                         "value": d5[key],
                     });
                     mapData[5].push({
-                        "year": '22_23',
+                        "year": year[5],
                         "name": key,
                         "value": d6[key],
+                    });
+                    mapData[6].push({
+                        "year": year[6],
+                        "name": key,
+                        "value": d7[key],
+                    });
+                    mapData[7].push({
+                        "year": year[7],
+                        "name": key,
+                        "value": d8[key],
+                    });
+                    mapData[8].push({
+                        "year": year[8],
+                        "name": key,
+                        "value": d9[key],
+                    });
+                    mapData[9].push({
+                        "year": year[9],
+                        "name": key,
+                        "value": d10[key],
+                    });
+                    mapData[10].push({
+                        "year": year[10],
+                        "name": key,
+                        "value": d11[key],
+                    });
+                    mapData[11].push({
+                        "year": year[11],
+                        "name": key,
+                        "value": d12[key],
                     });
 
                 }
@@ -256,7 +299,7 @@ var map = new Vue({
                         optionXyMap01.options.push({
                             backgroundColor: '#013954',
                             title: [{
-                                text: '2017~2022学年各省有效学校数(发过任务就算有效)',
+                                text: '2017至今学年各省有效学校数(发过任务就算有效)',
                                 left: '50%',
                                 top: '3%',
                                 textStyle: {
@@ -266,7 +309,7 @@ var map = new Vue({
                             },
                                 {
                                     id: 'statistic',
-                                    text: year[n] + "学年有效学校数---学校总数：" +  data.yearCount[n],
+                                    text: year[n] + "学年有效学校数---学校总数：" + data.yearCount[n],
                                     left: '80%',
                                     top: '8%',
                                     textStyle: {
