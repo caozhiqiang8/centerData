@@ -6,15 +6,24 @@ import urllib
 import hashlib
 import base64
 import json
-from public.db_con import es_connect
 import pandas as pd
 import datetime
+from elasticsearch import Elasticsearch
 
 # 显示所有行
 pd.set_option("display.max_rows", None)
 # 显示所有列
 pd.set_option("display.max_columns", None)
 
+
+
+# 链接ES
+def es_connect(index, body):
+    es_hosts = str("69.230.239.155,43.192.117.34").split(",")
+    es = Elasticsearch(es_hosts)
+    res = es.search(index=index, body=body)
+    res = json.loads(json.dumps(res))
+    return res
 
 # 获取钉钉链接,填入urlToken 和 secret
 def getSIGN():
@@ -76,7 +85,7 @@ ERR_NUM = 5
 # datafram 切片数量
 ILOC_NUM = 20
 # 需要过滤的接口
-filter_url_list = ['http://school-cloud.ai-classes.com/aixuepad-service33/login.do']
+filter_url_list = ['http://school-cloud.ai-classes.com/accesstoken-control/tokens']
 
 while True:
     now_etime = pd.to_datetime(datetime.datetime.now())

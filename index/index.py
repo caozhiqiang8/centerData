@@ -30,12 +30,18 @@ def getMap():
         province_data.append(data)
 
     data = {
-        'y22_23': province_data[0],
-        'y21_22': province_data[1],
-        'y20_21': province_data[2],
-        'y19_20': province_data[3],
-        'y18_19': province_data[4],
-        'y17_18': province_data[5],
+        'y22_23_2': province_data[0],
+        'y22_23_1': province_data[1],
+        'y21_22_2': province_data[2],
+        'y21_22_1': province_data[3],
+        'y20_21_2': province_data[4],
+        'y20_21_1': province_data[5],
+        'y19_20_2': province_data[6],
+        'y19_20_1': province_data[7],
+        'y18_19_2': province_data[8],
+        'y18_19_1': province_data[9],
+        'y17_18_2': province_data[10],
+        'y17_18_1': province_data[11],
         'yearCount': year_data[::-1],
     }
     return data

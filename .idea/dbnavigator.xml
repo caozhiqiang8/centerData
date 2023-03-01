@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -13,8 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="fc400174-b5b6-4b0a-91a2-adbc13b153be">
-      <console name="Connection" type="STANDARD" schema="DataCenterDB" session="Main"><![CDATA[select * from day_school_task 
-order  by date desc]]></console>
+      <console name="Connection" type="STANDARD" schema="DataCenterDB" session="Main"><![CDATA[select * from year_province_data where  'y22_23_2' > 0;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
