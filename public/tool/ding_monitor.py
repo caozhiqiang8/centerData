@@ -270,7 +270,7 @@ while True:
             ding_title = '{} 至 {} 接口访问次数暴增{}倍 \n'.format(now_btime, now_etime, URL_COUNT_NUM)
             for i in url_count_res_dict:
                 ding_text = ding_title + '{}\n'.format(i)
-                # dingText(ding_text)
+                dingText(ding_text)
                 print(ding_text)
                 time.sleep(1)
 
@@ -323,7 +323,7 @@ while True:
                 for i in url_err_dict:
                     ding_title = '{} 至 {} 接口报错{}次以上 \n'.format(now_btime, now_etime, ERR_NUM)
                     ding_text = ding_title + '{}\n'.format(i)
-                    # dingText(ding_text)
+                    dingText(ding_text)
                     print(ding_text)
                     time.sleep(1)
             else:
