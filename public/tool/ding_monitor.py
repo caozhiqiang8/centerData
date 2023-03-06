@@ -88,35 +88,44 @@ ILOC_NUM = 20
 filter_url_list = ['http://school-cloud.ai-classes.com/accesstoken-control/tokens']
 
 while True:
-    # now_etime = pd.to_datetime(datetime.datetime.now())
-    now_etime = pd.Timestamp("2023-03-04 12:25:04")
+    now_etime = pd.to_datetime(datetime.datetime.now())
+    # now_etime = pd.Timestamp("2023-03-04 12:25:04")
     now_btime = now_etime - pd.to_timedelta(1, unit='h')
     before_btime = now_btime - pd.to_timedelta(7, unit='d')
     before_etime = now_etime - pd.to_timedelta(7, unit='d')
 
     now_index = "action_logs_{}".format(now_etime.strftime("%Y%m%d"))
     before_index = "action_logs_{}".format(before_btime.strftime("%Y%m%d"))
-    print( '{}---周{}'.format(now_btime,now_btime.weekday()+1))
+    now_week = now_btime.weekday()+1
+    print( '{}---周{}'.format(now_btime,now_week))
 
     if now_etime.strftime("%H") >= '04' and now_etime.strftime("%H") <= '23':
         # 判断是不是周末
-        if now_btime.weekday()+1 > 6 :
+        if now_week < 6 :
             # 判断时间 如果 结束时间(当前时间)是 12:00 - 12:30   就从12：00开始
             if now_etime.strftime("%H") == '12' and now_etime.strftime("%M") < '30':
+                now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
                 now_etime = now_etime.strftime("%Y-%m-%d %H:00:00")
+                before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
                 before_etime = before_etime.strftime("%Y-%m-%d %H:00:00")
             # 判断时间 如果 开始时间是 12:00 - 12:30  就从 12：30 结束
             elif now_btime.strftime("%H") == '12' and now_btime.strftime("%M") < '30':
                 now_btime = now_btime.strftime("%Y-%m-%d %H:30:00")
+                now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
+                before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
                 before_btime = before_btime.strftime("%Y-%m-%d %H:30:00")
             else:
                 now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
                 now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
                 before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
                 before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
-
-        # print(now_btime,before_btime)
-        # print(now_etime,before_etime)
+        else:
+            now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
+            now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
+            before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
+            before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
+        print(now_btime,before_btime)
+        print(now_etime,before_etime)
         print("---------------------{} 至 {}---------------------".format(now_btime, now_etime))
 
         # 系统响应时长 监控
@@ -270,7 +279,7 @@ while True:
             ding_title = '{} 至 {} 接口访问次数暴增{}倍 \n'.format(now_btime, now_etime, URL_COUNT_NUM)
             for i in url_count_res_dict:
                 ding_text = ding_title + '{}\n'.format(i)
-                dingText(ding_text)
+                # dingText(ding_text)
                 print(ding_text)
                 time.sleep(1)
 
@@ -323,7 +332,7 @@ while True:
                 for i in url_err_dict:
                     ding_title = '{} 至 {} 接口报错{}次以上 \n'.format(now_btime, now_etime, ERR_NUM)
                     ding_text = ding_title + '{}\n'.format(i)
-                    dingText(ding_text)
+                    # dingText(ding_text)
                     print(ding_text)
                     time.sleep(1)
             else:
