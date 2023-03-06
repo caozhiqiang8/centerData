@@ -30,15 +30,15 @@ def getSIGN():
     # 获取当前时间戳字符串
     timestamp = str(round(time.time() * 1000))
 
-    # 正式webhook
-    urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=b05a57084bd9b1f9f5d78dae8237821c78c44890c799c23678c75e0c2aeae2e6"
-    # 正式secret
-    secret = 'SEC81159b69686e75d47b3bb0d9904e1ab19c5dbd7c641a4ad2ebc1b6848ec88e63'
+    # # 正式webhook
+    # urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=b05a57084bd9b1f9f5d78dae8237821c78c44890c799c23678c75e0c2aeae2e6"
+    # # 正式secret
+    # secret = 'SEC81159b69686e75d47b3bb0d9904e1ab19c5dbd7c641a4ad2ebc1b6848ec88e63'
 
-    # # 测试webhook
-    # urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=5d1bc1f624eaa769adec05af8b5839a8938e40baa71212cb64b961ffdd3bd903"
-    # # 测试正式secret
-    # secret = 'SEC754805d52d707cd5f3dc7bfaa39fd422869ea7259f2f570b7bce9fb7a8ff2d87'
+    # 测试webhook
+    urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=5d1bc1f624eaa769adec05af8b5839a8938e40baa71212cb64b961ffdd3bd903"
+    # 测试正式secret
+    secret = 'SEC754805d52d707cd5f3dc7bfaa39fd422869ea7259f2f570b7bce9fb7a8ff2d87'
 
     secret_enc = secret.encode('utf-8')
     # 秘钥字符串
@@ -89,19 +89,21 @@ filter_url_list = ['http://school-cloud.ai-classes.com/accesstoken-control/token
 
 while True:
     now_etime = pd.to_datetime(datetime.datetime.now())
-    # now_etime = pd.Timestamp("2023-02-15 04:25:04")
+    # now_etime = pd.Timestamp("2023-03-01 09:25:04")
     now_btime = now_etime - pd.to_timedelta(1, unit='h')
-    before_btime = now_btime - pd.to_timedelta(1, unit='d')
-    before_etime = now_etime - pd.to_timedelta(1, unit='d')
+    before_btime = now_btime - pd.to_timedelta(7, unit='d')
+    before_etime = now_etime - pd.to_timedelta(7, unit='d')
 
     now_index = "action_logs_{}".format(now_etime.strftime("%Y%m%d"))
     before_index = "action_logs_{}".format(before_btime.strftime("%Y%m%d"))
+    print( now_btime,now_btime.weekday()+1)
 
-    if now_etime.strftime("%H") >= '03' and now_etime.strftime("%H") <= '23':
+    if now_etime.strftime("%H") >= '04' and now_etime.strftime("%H") <= '23':
         now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
         now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
         before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
         before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
+        print(now_btime,now_etime,before_btime,before_etime)
         print("---------------------{} 至 {}---------------------".format(now_btime, now_etime))
 
         # 系统响应时长 监控
@@ -249,7 +251,7 @@ while True:
         # 接口访问次数 监控
         url_count = df_merge.iloc[:ILOC_NUM, :].loc[:, ['url', '今日访问次数', '昨日访问次数']]
         url_count_res = url_count[
-            (url_count['今日访问次数'] > (url_count['昨日访问次数'] * URL_COUNT_NUM)) & url_count['昨日访问次数'] > 0]
+            (url_count['今日访问次数'] > (url_count['昨日访问次数'] * URL_COUNT_NUM)) & url_count['昨日访问次数'] > 50]
         url_count_res_dict = url_count_res.iloc[:, :].to_dict(orient='records')
         if len(url_count_res_dict) > 0:
             ding_title = '{} 至 {} 接口访问次数暴增{}倍 \n'.format(now_btime, now_etime, URL_COUNT_NUM)
