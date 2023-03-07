@@ -30,15 +30,15 @@ def getSIGN():
     # 获取当前时间戳字符串
     timestamp = str(round(time.time() * 1000))
 
-    # # 正式webhook
-    # urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=b05a57084bd9b1f9f5d78dae8237821c78c44890c799c23678c75e0c2aeae2e6"
-    # # 正式secret
-    # secret = 'SEC81159b69686e75d47b3bb0d9904e1ab19c5dbd7c641a4ad2ebc1b6848ec88e63'
-
-    # 测试webhook
-    urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=5d1bc1f624eaa769adec05af8b5839a8938e40baa71212cb64b961ffdd3bd903"
-    # 测试正式secret
-    secret = 'SEC754805d52d707cd5f3dc7bfaa39fd422869ea7259f2f570b7bce9fb7a8ff2d87'
+    # 正式webhook
+    urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=b05a57084bd9b1f9f5d78dae8237821c78c44890c799c23678c75e0c2aeae2e6"
+    # 正式secret
+    secret = 'SEC81159b69686e75d47b3bb0d9904e1ab19c5dbd7c641a4ad2ebc1b6848ec88e63'
+    #
+    # # 测试webhook
+    # urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=5d1bc1f624eaa769adec05af8b5839a8938e40baa71212cb64b961ffdd3bd903"
+    # # 测试正式secret
+    # secret = 'SEC754805d52d707cd5f3dc7bfaa39fd422869ea7259f2f570b7bce9fb7a8ff2d87'
 
     secret_enc = secret.encode('utf-8')
     # 秘钥字符串
@@ -81,7 +81,7 @@ COST_NUM = 1.5
 # 接口访问倍数预警
 URL_COUNT_NUM = 5
 # 报错次数
-ERR_NUM = 5
+ERR_NUM = 1
 # datafram 切片数量
 ILOC_NUM = 20
 # 需要过滤的接口
