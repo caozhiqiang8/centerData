@@ -65,7 +65,6 @@ def image(page):
     print(end)
     return render_template("image.html", data=data)
 
-
 @app.route('/download', methods=['get'])
 def download():
     dir_path = r'C:\Users\caozhiqiang\Desktop'

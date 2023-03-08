@@ -224,7 +224,6 @@ def school_info():
     write_Sqlite(df=task, if_exists='replace', table_name='school_info')
 
 
-
 @cost_time
 def day_school_task(c_time):
     funs = [task_yb, task_xzy, task_tl, task_dl, task_cy, task_wkc, task_zbk, task_dtk, task_gxh, task_xs, task_axp,
@@ -298,7 +297,7 @@ if __name__ == '__main__':
         # now_time = pd.to_datetime(datetime.datetime.now())
         #
         # if now_time.strftime("%H") >= '05' and now_time.strftime("%H") <= '20':
-            # 同步每天学校任务数
+        # 同步每天学校任务数
         day_school_task(c_time=c_time)
 
         # 计算学年省市学校数
@@ -308,7 +307,7 @@ if __name__ == '__main__':
         school_info()
 
         #学校crm模型
-        school_crm()
+        # school_crm()
         # print("---------------------{}:同步完成---------------------".format(now_time))
         # time.sleep(60*60*2)
 

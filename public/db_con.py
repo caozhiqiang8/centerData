@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 from sqlalchemy import create_engine
 import pandas as pd
 import sqlite3
-
+import  os,sys
 
 # 链接ES
 def es_connect(index, body):
@@ -21,34 +21,21 @@ def mysql_connect(sql):
     result = pd.read_sql_query(sql=sql, con=engine)
     return result
 
-sqlit_url = r'D:\DataCenter\DataCenterDB.sqlite3'
+sqllite_path =r'F:\PythonObject\DataCenterDB.sqlite3'
 
 # 链接sqlite---dataFrame
 def sqlite_connect(sql):
-    engine = create_engine('sqlite:///{}'.format(sqlit_url))
+    # sqllite_path = os.path.abspath('DataCenterDB.sqlite3')
+    engine = create_engine('sqlite:///{}'.format(sqllite_path))
     result = pd.read_sql(sql=sql, con=engine)
     return result
-
-
-class SqliteDb(object):
-
-    def __init__(self, sql):
-        self.sql = sql
-
-    def connectDb(self):
-        engine = create_engine('sqlite:///F:\\PythonObject\\DataCenterDB.sqlite3')
-        result = pd.read_sql(sql=self.sql, con=engine)
-        return result
-
-    def toJson(self, df):
-        result = json.loads(df.to_json(orient='records', force_ascii=False))
-        return result
 
 
 #  插入数据
 def write_Sqlite(df, table_name, if_exists):
     # if_exists: replace  清空后添加，，append  追加
-    con = sqlite3.connect(sqlit_url)
+    # sqllite_path = os.path.abspath('DataCenterDB.sqlite3')
+    con = sqlite3.connect(sqllite_path)
     rs = con.cursor()
     if table_name == 'day_school_task':
         if if_exists == 'append':
@@ -76,11 +63,7 @@ def write_Sqlite(df, table_name, if_exists):
 
 
 if __name__ == '__main__':
-    sql = '''
-            SELECT type as 'name' ,count(*) as 'value' from school_crm 
-            GROUP BY  type 
-            '''
-    data = sqlite_connect(sql)
 
-    data = data.to_dict('records')
-    print(data)
+    print(sys.argv[0])
+    print(os.path.abspath('..\\DataCenterDB.sqlite3'))
+    print(os.path.abspath(__file__))

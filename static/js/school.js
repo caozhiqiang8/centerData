@@ -49,14 +49,7 @@ var tabs = new Vue({
     methods: {
         handleClick(tab, event) {
             console.log(tab.name, event);
-            if (tab.name === 'first') {
-                this.schoolTypeShow = true
-                this.schoolInfoShow = false
-                this.schooType()
-
-            }
             if (tab.name === 'second') {
-                this.schoolTypeShow = false
                 this.schoolInfoShow = true
                 this.schoolInfo()
 
