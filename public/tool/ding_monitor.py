@@ -88,8 +88,8 @@ ILOC_NUM = 20
 filter_url_list = ['http://school-cloud.ai-classes.com/accesstoken-control/tokens']
 
 while True:
-    # now_etime = pd.to_datetime(datetime.datetime.now())
-    now_etime = pd.Timestamp("2023-03-14 12:40:19")
+    now_etime = pd.to_datetime(datetime.datetime.now())
+    # now_etime = pd.Timestamp("2023-03-14 12:40:19")
     now_btime = now_etime - pd.to_timedelta(1, unit='h')
     before_btime = now_btime - pd.to_timedelta(7, unit='d')
     before_etime = now_etime - pd.to_timedelta(7, unit='d')
