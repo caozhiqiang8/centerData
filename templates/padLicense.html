@@ -16,15 +16,15 @@
         {# 二级导航 #}
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="学习机" name="first"></el-tab-pane>
+                <el-tab-pane label="学习机出库详情" name="first"></el-tab-pane>
                 <el-tab-pane label="期待" name="second"></el-tab-pane>
                 <el-tab-pane label="期待" name="third"></el-tab-pane>
                 <el-tab-pane label="期待" name="fourth"></el-tab-pane>
             </el-tabs>
         </template>
 
-        {#   练习册情况列表     #}
-        <p> 学习机总数:[[pad_license_sum]]&nbsp;&nbsp;&nbsp;未加卡:[[pad_license_1]]&nbsp;&nbsp;&nbsp;已激活:[[pad_license_7]] &nbsp;&nbsp;&nbsp;C转B:[[pad_license_8]]</p>
+        {#   学习机出库详情     #}
+        <p> 学习机总数:[[pad_license_sum]]&nbsp;&nbsp;&nbsp;出库未激活:[[pad_license_0]]&nbsp;&nbsp;&nbsp; 未加卡:[[pad_license_1]]&nbsp;&nbsp;&nbsp;已激活:[[pad_license_7]]&nbsp;&nbsp;&nbsp;B转C:[[pad_license_8]]</p>
         <div style="margin-top: 20px">
             <template>
                 <el-table

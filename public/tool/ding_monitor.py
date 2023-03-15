@@ -7,7 +7,6 @@ import hashlib
 import base64
 import json
 import pandas as pd
-import datetime
 from elasticsearch import Elasticsearch
 
 # 显示所有行
@@ -34,7 +33,7 @@ def getSIGN():
     urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=b05a57084bd9b1f9f5d78dae8237821c78c44890c799c23678c75e0c2aeae2e6"
     # 正式secret
     secret = 'SEC81159b69686e75d47b3bb0d9904e1ab19c5dbd7c641a4ad2ebc1b6848ec88e63'
-    #
+
     # # 测试webhook
     # urlToken = r"https://oapi.dingtalk.com/robot/send?access_token=5d1bc1f624eaa769adec05af8b5839a8938e40baa71212cb64b961ffdd3bd903"
     # # 测试正式secret
@@ -88,8 +87,8 @@ ILOC_NUM = 20
 filter_url_list = ['http://school-cloud.ai-classes.com/accesstoken-control/tokens']
 
 while True:
-    now_etime = pd.to_datetime(datetime.datetime.now())
-    # now_etime = pd.Timestamp("2023-03-04 12:25:04")
+    # now_etime = pd.to_datetime(datetime.datetime.now())
+    now_etime = pd.Timestamp("2023-03-14 12:40:19")
     now_btime = now_etime - pd.to_timedelta(1, unit='h')
     before_btime = now_btime - pd.to_timedelta(7, unit='d')
     before_etime = now_etime - pd.to_timedelta(7, unit='d')
@@ -97,18 +96,23 @@ while True:
     now_index = "action_logs_{}".format(now_etime.strftime("%Y%m%d"))
     before_index = "action_logs_{}".format(before_btime.strftime("%Y%m%d"))
     now_week = now_btime.weekday()+1
-    print( '{}---周{}'.format(now_btime,now_week))
+    print( '{}---周{}'.format(now_etime,now_week))
 
     if now_etime.strftime("%H") >= '04' and now_etime.strftime("%H") <= '23':
         # 判断是不是周末
         if now_week < 6 :
             # 判断时间 如果 结束时间(当前时间)是 12:00 - 12:30   就从12：00开始
-            if now_etime.strftime("%H") == '12' and now_etime.strftime("%M") < '30':
+            if now_etime.strftime("%H") == '12' and now_etime.strftime("%M") <= '45':
                 now_btime = now_btime.strftime("%Y-%m-%d %H:%M:%S")
                 now_etime = now_etime.strftime("%Y-%m-%d %H:00:00")
                 before_btime = before_btime.strftime("%Y-%m-%d %H:%M:%S")
                 before_etime = before_etime.strftime("%Y-%m-%d %H:00:00")
             # 判断时间 如果 开始时间是 12:00 - 12:30  就从 12：30 结束
+            elif now_etime.strftime("%H") == '12' and now_etime.strftime("%M") > '45'  and now_etime.strftime("%M") < '60' :
+                now_btime = now_btime.strftime("%Y-%m-%d 12:30:00")
+                now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
+                before_etime = before_etime.strftime("%Y-%m-%d %H:%M:%S")
+                before_btime = before_btime.strftime("%Y-%m-%d 12:30:00")
             elif now_btime.strftime("%H") == '12' and now_btime.strftime("%M") < '30':
                 now_btime = now_btime.strftime("%Y-%m-%d %H:30:00")
                 now_etime = now_etime.strftime("%Y-%m-%d %H:%M:%S")
