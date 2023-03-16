@@ -1,15 +1,16 @@
 import datetime
+import json
 import time
-
 import pandas as pd
+import requests
 from public.db_con import mysql_connect, sqlite_connect, write_Sqlite
 from public.df_merge import df_merge
 from public.record_time import cost_time
 from public.school_crm import school_crm
 import threading
+import schedule
 
 task_df_list = []
-
 
 def task_yb(time):
     sql = '''
@@ -247,12 +248,15 @@ def day_school_task(c_time):
 
     task_df = df_merge(on=['date', 'name', 'school_id', 'province', 'city'], how='outer', df=task_df_list)
     print('合并表格完成')
+    print(task_df)
 
     # replace清空后添加，，append追加
     if c_time == '':
         write_Sqlite(df=task_df, table_name='day_school_task', if_exists='replace')
     else:
         write_Sqlite(df=task_df, table_name='day_school_task', if_exists='append')
+    threads.clear()
+    task_df_list.clear()
 
 
 @cost_time
@@ -286,28 +290,113 @@ def year_province_count():
     year_province_df = df_merge(on=['province'], how='left', df=year_province_data)
 
     write_Sqlite(df=year_province_df, table_name='year_province_data', if_exists='replace')
+    year_province_data.clear()
     # return year_province_df
 
+@cost_time
+def pad_license_dau(b_time,e_time,group_by_time,index,table_name,if_exists):
+    body = '''
+    {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "term": {
+                "app_name": {
+                  "value": "aiStudy"
+                }
+              }
+            },
+            {
+              "range": {
+                "process_time": {
+                  "gte": "%s",
+                  "lte": "%s"
+                }
+              }
+            },
+            {
+              "range": {
+                "message_type": {
+                  "gte": 1,
+                  "lte": 100
+                }
+              }
+            },
+            {
+              "term": {
+                "return_result": {
+                  "value": "1"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "distinctjId": {
+          "cardinality": {
+            "field": "jId"
+          }
+        },
+        "group_by_time":{
+          "date_histogram": {
+            "field": "process_time",
+            "interval": "%s"
+          },
+          "aggs": {
+            "disjId": {
+              "cardinality": {
+                "field": "jId"
+              }
+            }
+          }
+        }
+      }
+    }
+    ''' % (b_time, e_time,group_by_time)
+    HEADERS = {
+        'Content-Type': 'application/json',
+        'kbn-xsrf': 'true',
+    }
+
+    url = 'http://52.82.30.42:5601/api/console/proxy?path={}/_search&method=POST'.format(index)
+    res = requests.post(url=url, verify='path', auth=('kibana', 'etiantian2018!'), data=body, headers=HEADERS)
+    res = json.loads(res.text)
+    data = res['aggregations']['group_by_time']['buckets']
+    df_list = []
+    for i in data:
+        df = pd.DataFrame.from_dict(i, orient='index').T
+        df['disJid'] = i['disjId']['value']
+        df_list.append(df)
+    res_df = pd.concat(df_list, axis=0, ignore_index=True)
+    res_df = res_df.loc[:, ['key_as_string', 'doc_count', 'disJid']]
+    res_df.columns = ['time', 'pv', 'uv']
+    write_Sqlite(df=res_df, table_name=table_name, if_exists=if_exists)
+    df_list.clear()
 
 
 if __name__ == '__main__':
 
-    # while True:
-        c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
-        # now_time = pd.to_datetime(datetime.datetime.now())
-        #
-        # if now_time.strftime("%H") >= '05' and now_time.strftime("%H") <= '20':
-        # 同步每天学校任务数
-        day_school_task(c_time=c_time)
+    c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
+    # 同步每天学校任务数
+    schedule.every().day.at("04:00").do(day_school_task,c_time)
+    # 计算学年省市学校数
+    schedule.every().day.at("04:10").do(year_province_count)
+    # 学校列表
+    schedule.every().day.at("04:15").do(school_info)
 
-        # 计算学年省市学校数
-        year_province_count()
+    # 学习机活跃度
+    now_time = pd.to_datetime(datetime.datetime.now())
+    b_time = (now_time - pd.to_timedelta(1, unit='d')).strftime("%Y-%m-%d 00:00:00")
+    e_time = now_time.strftime("%Y-%m-%d 00:00:00")
+    index = 'message_log'
 
-        # 学校列表
-        school_info()
+    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1h','message_log',index,'pad_license_dau_h','append')
+    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1d','message_log',index,'pad_license_dau','append')
 
-        #学校crm模型
-        # school_crm()
-        # print("---------------------{}:同步完成---------------------".format(now_time))
-        # time.sleep(60*60*2)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 

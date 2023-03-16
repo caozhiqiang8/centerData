@@ -16,42 +16,51 @@
         {# 二级导航 #}
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="学习机活跃度（天）" name="second"></el-tab-pane>
                 <el-tab-pane label="学习机出库详情" name="first"></el-tab-pane>
-                <el-tab-pane label="期待" name="second"></el-tab-pane>
+
                 <el-tab-pane label="期待" name="third"></el-tab-pane>
                 <el-tab-pane label="期待" name="fourth"></el-tab-pane>
             </el-tabs>
         </template>
 
+        {# 作业总览 #}
+        <div id='main' style='width:1600px;height:700px;margin: 0px auto;' v-show='secondShow'>
+        </div>
+
+
         {#   学习机出库详情     #}
-        <p> 学习机总数:[[pad_license_sum]]&nbsp;&nbsp;&nbsp;出库未激活:[[pad_license_0]]&nbsp;&nbsp;&nbsp; 未加卡:[[pad_license_1]]&nbsp;&nbsp;&nbsp;已激活:[[pad_license_7]]&nbsp;&nbsp;&nbsp;B转C:[[pad_license_8]]</p>
-        <div style="margin-top: 20px">
-            <template>
-                <el-table
-                        :data="padLicense"
-                        border
-                        stripe
-                        style="width: 100%"
-                        empty-text="玩了命的加载中....."
-                        :default-sort="{prop: 'date', order: 'descending'}"
+        <div v-show='firstShow'>
+            <p> 学习机总数:[[pad_license_sum]]&nbsp;&nbsp;&nbsp;出库未激活（0）:[[pad_license_0]]&nbsp;&nbsp;&nbsp;
+                未加卡（1）:[[pad_license_1]]&nbsp;&nbsp;&nbsp;已激活（7）:[[pad_license_7]]&nbsp;&nbsp;&nbsp;B转C（8）:[[pad_license_8]]</p>
+            <div style="margin-top: 20px">
+                <template>
+                    <el-table
+                            :data="padLicense"
+                            border
+                            stripe
+                            style="width: 100%"
+                            empty-text="玩了命的加载中....."
+                            :default-sort="{prop: 'date', order: 'descending'}"
 
-                >
+                    >
 
-                    <el-table-column prop="license_id" label="license_id" sortable></el-table-column>
+                        <el-table-column prop="license_id" label="license_id" sortable></el-table-column>
 
-                    <el-table-column prop="remarks" label="名字" sortable></el-table-column>
+                        <el-table-column prop="remarks" label="名字" sortable></el-table-column>
 
-                    <el-table-column prop="state_id" label="状态" sortable></el-table-column>
+                        <el-table-column prop="state_id" label="状态" sortable></el-table-column>
 
-                    <el-table-column prop="name" label="分校" sortable></el-table-column>
+                        <el-table-column prop="name" label="分校" sortable></el-table-column>
 
-                    <el-table-column prop="c_time" label="创建时间" sortable></el-table-column>
+                        <el-table-column prop="c_time" label="创建时间" sortable></el-table-column>
 
-                    <el-table-column prop="active_time" label="激活时间" sortable></el-table-column>
+                        <el-table-column prop="active_time" label="激活时间" sortable></el-table-column>
 
 
-                </el-table>
-            </template>
+                    </el-table>
+                </template>
+            </div>
         </div>
 
 
