@@ -27,7 +27,9 @@ var padLicense = new Vue({
                 this.secondShow = true
             }
             if (tab.name === 'third') {
-
+                this.getPadLicensePauH()
+                this.firstShow = false
+                this.secondShow = true
             }
             if (tab.name === 'fourth') {
 
@@ -48,7 +50,19 @@ var padLicense = new Vue({
                 .catch(err => (console.log((err))))
         },
         getPadLicensePau(){
-            axios.get('/padLicenseDau')
+            axios.get('/padLicenseDau?res=0')
+                .then(data =>{
+                    console.log(data.data)
+                    this.echartsNames = ['活跃次数','活跃人数']
+                    this.echartslineX = data.data.data_x
+                    this.echartsValue = data.data.data_y
+                    this.$options.methods.eycharts(this.echartsNames, this.echartslineX, this.echartsValue)
+
+                })
+                .catch(err =>(console.log(err)))
+        },
+        getPadLicensePauH(){
+            axios.get('/padLicenseDau?res=1')
                 .then(data =>{
                     console.log(data.data)
                     this.echartsNames = ['活跃次数','活跃人数']
@@ -289,6 +303,7 @@ var padLicense = new Vue({
             myChart.setOption(option);
         },
     },
+
     mounted() {
         this.getPadLicensePau();
     }

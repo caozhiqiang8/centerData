@@ -1,5 +1,5 @@
 import json
-from flask import render_template
+from flask import render_template, request
 from public.db_con import mysql_connect,sqlite_connect
 from pad_license import pad_license_blue
 
@@ -30,14 +30,21 @@ def padLicenseInfo():
 
 @pad_license_blue.route('/padLicenseDau', methods=['get'])
 def padLicenseDau():
-    sql = '''
-    SELECT strftime('%Y-%m-%d',time ) as 'date' , pv,uv  from pad_license_dau
-    '''
+    res_id = request.args.get('res')
+    print(res_id)
+    if res_id =='0':
+        sql = '''
+        SELECT strftime('%Y-%m-%d',time ) as 'date' , pv,uv  from pad_license_dau
+        '''
+    elif res_id =='1':
+        sql = '''
+        SELECT time as 'date' , pv,uv  from pad_license_dau_h   where time >= '2023-03-12'
+
+        '''
     data = sqlite_connect(sql=sql)
     data_x = data['date'].to_list()
     data_y1 = data['pv'].to_list()
     data_y2 = data['uv'].to_list()
-
     data = {
         'data_x':data_x,
         'data_y':[data_y1,data_y2]
