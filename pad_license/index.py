@@ -38,7 +38,7 @@ def padLicenseDau():
         '''
     elif res_id =='1':
         sql = '''
-        SELECT time as 'date' , pv,uv  from pad_license_dau_h   where time >= '2023-03-12'
+        SELECT time as 'date' , pv,uv  from pad_license_dau_h  
 
         '''
     data = sqlite_connect(sql=sql)

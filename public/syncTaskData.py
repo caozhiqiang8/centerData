@@ -248,7 +248,6 @@ def day_school_task(c_time):
 
     task_df = df_merge(on=['date', 'name', 'school_id', 'province', 'city'], how='outer', df=task_df_list)
     print('合并表格完成')
-    print(task_df)
 
     # replace清空后添加，，append追加
     if c_time == '':
@@ -381,11 +380,11 @@ if __name__ == '__main__':
 
     c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
     # 同步每天学校任务数
-    schedule.every().day.at("04:00").do(day_school_task,c_time)
+    schedule.every(2).hour.do(day_school_task,c_time)
     # 计算学年省市学校数
-    schedule.every().day.at("04:10").do(year_province_count)
+    schedule.every(2).hour.do(year_province_count)
     # 学校列表
-    schedule.every().day.at("04:15").do(school_info)
+    schedule.every(2).hour.do(school_info)
 
     # 学习机活跃度
     now_time = pd.to_datetime(datetime.datetime.now())
@@ -393,8 +392,8 @@ if __name__ == '__main__':
     e_time = now_time.strftime("%Y-%m-%d 00:00:00")
     index = 'message_log'
 
-    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1h','message_log',index,'pad_license_dau_h','append')
-    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1d','message_log',index,'pad_license_dau','append')
+    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1h',index,'pad_license_dau_h','append')
+    schedule.every().day.at("05:10").do(pad_license_dau,b_time,e_time,'1d',index,'pad_license_dau','append')
 
     while True:
         schedule.run_pending()
