@@ -21,6 +21,11 @@ var monitor = new Vue({
         model_name: '',
         urlCostTimeShow: false,
         loading: false,
+        //视频审核
+        videoReviewData:'',
+        videoReviewShow:false,
+        dateVideo:'',
+
 
     },
     methods: {
@@ -31,6 +36,7 @@ var monitor = new Vue({
                 this.urlDataShow = false
                 this.urlBoxShow = false
                 this.urlCostTimeShow = false
+                this.videoReviewShow = false
 
             }
             if (tab.name === 'second') {
@@ -38,6 +44,7 @@ var monitor = new Vue({
                 this.urlDataShow = true
                 this.urlBoxShow = false
                 this.urlCostTimeShow = false
+                this.videoReviewShow = false
 
             }
             if (tab.name === 'third') {
@@ -46,6 +53,7 @@ var monitor = new Vue({
                 this.urlDataShow = false
                 this.urlBoxShow = true
                 this.urlCostTimeShow = false
+                this.videoReviewShow = false
 
             }
             if (tab.name === 'fourth') {
@@ -53,6 +61,15 @@ var monitor = new Vue({
                 this.urlDataShow = false
                 this.urlBoxShow = false
                 this.urlCostTimeShow = true
+                this.videoReviewShow = false
+
+            }
+            if (tab.name === 'five') {
+                this.userActionShow = false
+                this.urlDataShow = false
+                this.urlBoxShow = false
+                this.urlCostTimeShow = false
+                this.videoReviewShow = true
 
             }
         },
@@ -201,6 +218,16 @@ var monitor = new Vue({
                     .catch(err => (console.log(err)))
             }
 
+        },
+        getVideoReview() {
+            axios.post('/videoReview',{'date': this.dateVideo})
+                .then(data => {
+                    this.videoReviewData = data.data.videoReviewData
+                })
+                .catch(err => (console.log((err))))
+        },
+        toVideo(res_id){
+            window.open('https://school-web.ai-classes.com/ecampus/resourcepreview/index.html?resId='+res_id + '&token=' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXRhaWwiOnsidXNlcklkIjoyOTUxNjM1LCJ1c2VyTmFtZSI6IuWkp-i_nua1i-ivlTAwMSIsInBhc3N3b3JkIjoiIiwidXNlcklkZW50aXR5IjoxLCJlbmFibGUiOjEsInNjaG9vbFVzZXJJZCI6MzY3Njg2LCJzY2hvb2xJZCI6NTAwNDMsInNjaG9vbFVzZXJSZWYiOiJmYzI4Y2IwYi1lMDRmLTQ0ODUtOTQ4Yi02M2Q0NTU2ZmNlNGEiLCJzY2hvb2xHcm91cElkIjo3LCJyb2xlcyI6WzE2LDE3LDIsNSwyMSw2LDksMTMsMTVdLCJ1cmxMaXN0IjpudWxsfSwiZXhwIjoxNjgxMTkxNTQ3LCJ1c2VyX25hbWUiOiLlpKfov57mtYvor5UwMDEiLCJqdGkiOiI5NDA2M2M5MC1kNGUwLTRhN2EtYjE5My1kNDk3ZGJlZDEwYTUiLCJjbGllbnRfaWQiOiJGQTlFMjE1QkU1NjZFRTkyNjE0RkJDMTFBQkVERjk2OCIsInNjb3BlIjpbImFsbCIsIndlYiIsIm1vYmlsZSJdfQ.9kDCOsLi1tgK-_p6-rYsT5h6rbuL95zr70d9HL8Tcqo')
         },
         urlCostTimeEycharts(model_name, x_data, y_data) {
 

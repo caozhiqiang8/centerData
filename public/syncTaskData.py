@@ -380,11 +380,11 @@ if __name__ == '__main__':
 
     c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
     # 同步每天学校任务数
-    schedule.every(2).hour.do(day_school_task,c_time)
+    schedule.every(2).hours.do(day_school_task,c_time)
     # 计算学年省市学校数
-    schedule.every(2).hour.do(year_province_count)
+    schedule.every(2).hours.do(year_province_count)
     # 学校列表
-    schedule.every(2).hour.do(school_info)
+    schedule.every(2).hours.do(school_info)
 
     # 学习机活跃度
     now_time = pd.to_datetime(datetime.datetime.now())

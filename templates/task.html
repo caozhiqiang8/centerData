@@ -48,6 +48,7 @@
                         v-show='schoolTaskShow'
                         :height='windowsHeight'
                 >
+
                     <el-table-column prop="school_id" label="ID" sortable>
                         <template slot-scope="scope">
                             <p style="color: blue" @click="getSchoolDayTask(scope.row.school_id,scope.row.name)"> [[
