@@ -16,11 +16,12 @@
         {# 二级导航 #}
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                 <el-tab-pane label="视频审核" name="five"></el-tab-pane>
                 <el-tab-pane label="行为日志" name="first"></el-tab-pane>
                 <el-tab-pane label="接口调用" name="second"></el-tab-pane>
-                <el-tab-pane label="url分析" name="third"></el-tab-pane>
                 <el-tab-pane label="响应时长" name="fourth"></el-tab-pane>
-                <el-tab-pane label="视频审核" name="five"></el-tab-pane>
+                <el-tab-pane label="url分析" name="third"></el-tab-pane>
+
             </el-tabs>
         </template>
 
@@ -145,7 +146,9 @@
 
         <div style="margin-top: 20px" v-show="videoReviewShow">
             <template>
+                {#      筛选          #}
                 <div class="block" style="width: 300px">
+                    {#      日期选择          #}
                     <el-date-picker
                             v-model="dateVideo"
                             type="date"
@@ -153,9 +156,9 @@
                             format="yyyy-MM-dd"
                             value-format="yyyy-MM-dd">
                     </el-date-picker>
-
-                     <el-input v-model="userName" style="width: 220px;margin-top: 10px" placeholder="请输入用户名"></el-input>
-
+                    {#      用户名搜索资源          #}
+                    <el-input v-model="userName" style="width: 220px;margin-top: 10px"
+                              placeholder="输入用户名查找全部资源"></el-input>
                     <el-row style="float: right;margin-top: 10px">
                         <el-button type="primary" @click="getVideoReview">查询</el-button>
                     </el-row>
@@ -205,15 +208,20 @@
                     </el-table-column>
                     <el-table-column label="强改密" sortable>
                         <template slot-scope="scope">
-                            <p style="color: blue" @click="remindUser(scope.row.user_id )">拉黑</p>
+                            <p style="color: blue" @click="remindUser(scope.row.user_id )">强改密</p>
                         </template>
                     </el-table-column>
 
                 </el-table>
+                {#    回到顶部 #}
+                <el-backtop></el-backtop>
+
             </template>
+
         </div>
 
     </div>
+
 
 {% endblock %}
 

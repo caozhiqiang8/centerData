@@ -2,10 +2,10 @@ var monitor = new Vue({
     el: '#monitor',
     delimiters: ['[[', ']]'],
     data: {
-        activeName: 'first',
+        activeName: 'five',
         // 用户行为
         jid: '',
-        userActionShow: true,
+        userActionShow: false,
         userAction: '',
         //接口调用
         date: '',
@@ -23,7 +23,7 @@ var monitor = new Vue({
         loading: false,
         //视频审核
         videoReviewData: '',
-        videoReviewShow: false,
+        videoReviewShow: true,
         videoCount:0,
         userName: '',
         token: '',
