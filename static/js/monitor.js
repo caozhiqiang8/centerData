@@ -24,10 +24,10 @@ var monitor = new Vue({
         //视频审核
         videoReviewData: '',
         videoReviewShow: false,
+        videoCount:0,
         userName: '',
         token: '',
         dateVideo: '',
-
 
     },
     methods: {
@@ -222,11 +222,14 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-
+            this.loading = true
             axios.post('/videoReview', {'date': this.dateVideo, 'userName': this.userName})
                 .then(data => {
                     this.videoReviewData = data.data.videoReviewData
                     this.token = data.data.user_token
+                    this.videoCount = data.data.videoCount
+                    console.log(data.data.videoCount)
+                    this.loading = false
                 })
                 .catch(err => (console.log((err))))
 
@@ -259,6 +262,22 @@ var monitor = new Vue({
                         this.$notify({
                             title: '成功',
                             message: '拉黑成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+                .catch(err => (console.log((err))))
+        },
+        remindUser(user_id){
+            axios.get('https://school-cloud.ai-classes.com/api-service-general/users/remind-user-password?userId=' + user_id)
+                .then(data => {
+                    console.log(data.data)
+                    if (data.data.code == 1) {
+                        this.$notify({
+                            title: '成功',
+                            message: '已强制改密码',
                             type: 'success'
                         });
 

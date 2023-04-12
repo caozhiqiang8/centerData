@@ -253,8 +253,7 @@ def videoReview():
                         and u.user_name = '{}'
                         ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
                         '''.format(user_name)
-        data = mysql_connect(sql)
-        videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
+        data_video = mysql_connect(sql)
     elif date:
         sql = '''
                 SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
@@ -266,13 +265,15 @@ def videoReview():
                   and rs.c_time >='{} 00:00:00' and rs.c_time <'{} 23:59:59'
                 ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
                 '''.format(date, date)
-        data = mysql_connect(sql)
-        videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
+        data_video = mysql_connect(sql)
+    videoCount = int(data_video['res_id'].count())
+
+    videoReviewData = json.loads(data_video.to_json(orient='records', force_ascii=False))
 
     user_token = token()
-
     data = {
         'videoReviewData':videoReviewData,
+        'videoCount':videoCount,
         'user_token':user_token
     }
     return data
