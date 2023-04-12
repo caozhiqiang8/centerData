@@ -3,7 +3,7 @@ import pandas as pd
 from flask import render_template, request
 from public.db_con import es_connect,mysql_connect
 from monitor import monitor_blue
-
+from public.token import token
 
 # 数据监控路由
 @monitor_blue.route('/monitor', methods=['get'])
@@ -253,7 +253,10 @@ def videoReview():
     data = mysql_connect(sql)
     videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
 
+    user_token = token()
+
     data = {
-        'videoReviewData':videoReviewData
+        'videoReviewData':videoReviewData,
+        'user_token':user_token
     }
     return data

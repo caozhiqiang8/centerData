@@ -22,9 +22,10 @@ var monitor = new Vue({
         urlCostTimeShow: false,
         loading: false,
         //视频审核
-        videoReviewData:'',
-        videoReviewShow:false,
-        dateVideo:'',
+        videoReviewData: '',
+        videoReviewShow: false,
+        token:'',
+        dateVideo: '',
 
 
     },
@@ -220,15 +221,49 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-            axios.post('/videoReview',{'date': this.dateVideo})
+            axios.post('/videoReview', {'date': this.dateVideo})
                 .then(data => {
                     this.videoReviewData = data.data.videoReviewData
+                    this.token = data.data.user_token
                 })
                 .catch(err => (console.log((err))))
         },
-        toVideo(res_id){
-            window.open('https://school-web.ai-classes.com/ecampus/resourcepreview/index.html?resId='+res_id + '&token=' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXRhaWwiOnsidXNlcklkIjoyOTUxNjM1LCJ1c2VyTmFtZSI6IuWkp-i_nua1i-ivlTAwMSIsInBhc3N3b3JkIjoiIiwidXNlcklkZW50aXR5IjoxLCJlbmFibGUiOjEsInNjaG9vbFVzZXJJZCI6MzY3Njg2LCJzY2hvb2xJZCI6NTAwNDMsInNjaG9vbFVzZXJSZWYiOiJmYzI4Y2IwYi1lMDRmLTQ0ODUtOTQ4Yi02M2Q0NTU2ZmNlNGEiLCJzY2hvb2xHcm91cElkIjo3LCJyb2xlcyI6WzE2LDE3LDIsNSwyMSw2LDksMTMsMTVdLCJ1cmxMaXN0IjpudWxsfSwiZXhwIjoxNjgxMTkxNTQ3LCJ1c2VyX25hbWUiOiLlpKfov57mtYvor5UwMDEiLCJqdGkiOiI5NDA2M2M5MC1kNGUwLTRhN2EtYjE5My1kNDk3ZGJlZDEwYTUiLCJjbGllbnRfaWQiOiJGQTlFMjE1QkU1NjZFRTkyNjE0RkJDMTFBQkVERjk2OCIsInNjb3BlIjpbImFsbCIsIndlYiIsIm1vYmlsZSJdfQ.9kDCOsLi1tgK-_p6-rYsT5h6rbuL95zr70d9HL8Tcqo')
+        delVideo(res_id,index,rows) {
+            axios.get('https://school-cloud.ai-classes.com/api-service-resource/resources/delete-res?resId=' + res_id)
+                .then(data => {
+                    console.log(data.data)
+                    if (data.data.code == 1) {
+                        this.$notify({
+                            title: '成功',
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        rows.splice(index,1)
+                    }
+
+                })
+                .catch(err => (console.log((err))))
         },
+        toVideo(res_id) {
+            window.open('https://school-web.ai-classes.com/ecampus/resourcepreview/index.html?resId=' + res_id + '&token=' + this.token)
+        },
+        blackUser(user_id){
+            axios.get('https://school-cloud.ai-classes.com/business-service-resource/file-uploads/black-user-insert?userId=' + user_id)
+                .then(data => {
+                    console.log(data.data)
+                    if (data.data.code == 1) {
+                        this.$notify({
+                            title: '成功',
+                            message: '拉黑成功',
+                            type: 'success'
+                        });
+
+                    }
+
+                })
+                .catch(err => (console.log((err))))
+        },
+
         urlCostTimeEycharts(model_name, x_data, y_data) {
 
             var myChart = echarts.init(document.getElementById('urlCostTime'));

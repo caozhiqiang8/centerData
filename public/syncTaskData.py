@@ -391,7 +391,8 @@ if __name__ == '__main__':
     b_time = (now_time - pd.to_timedelta(1, unit='d')).strftime("%Y-%m-%d 00:00:00")
     e_time = now_time.strftime("%Y-%m-%d 00:00:00")
     index = 'message_log'
-
+    print(b_time)
+    print(e_time)
     schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1h',index,'pad_license_dau_h','append')
     schedule.every().day.at("05:10").do(pad_license_dau,b_time,e_time,'1d',index,'pad_license_dau','append')
 

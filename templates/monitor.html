@@ -145,7 +145,7 @@
 
         <div style="margin-top: 20px" v-show="videoReviewShow">
             <template>
-                 <div class="block" style="width: 300px">
+                <div class="block" style="width: 300px">
                     <el-date-picker
                             v-model="dateVideo"
                             type="date"
@@ -171,29 +171,36 @@
                         element-loading-text="拼命加载中"
                 >
                     <el-table-column prop="res_id" label="ID" sortable></el-table-column>
-                    <el-table-column prop="res_id" label="资源名称" sortable>
-                        <template slot-scope="scope">
-                            <p style="color: blue" @click="toVideo(scope.row.res_id)"> [[ scope.row.res_name]]</p>
-                        </template>
-                    </el-table-column>
-
-
                     <el-table-column prop="文件大小(G)" label="文件大小" sortable></el-table-column>
                     <el-table-column prop="name" label="学校" sortable></el-table-column>
                     <el-table-column prop="user_name" label="用户名" sortable></el-table-column>
                     <el-table-column prop="password" label="密码" sortable></el-table-column>
                     <el-table-column prop="c_time" label="时间" sortable></el-table-column>
-                    <el-table-column prop="mp4_url" label="文件地址" sortable></el-table-column>
-
-
+                    {#                    <el-table-column prop="mp4_url" label="文件地址" sortable></el-table-column>#}
                     </el-table-column>
-
-
+                    <el-table-column prop="res_id" label="资源名称" sortable>
+                        <template slot-scope="scope">
+                            <p style="color: blue" @click="toVideo(scope.row.res_id)"> [[ scope.row.res_name]]</p>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="im_url" label="预览图" width="400" sortable>
                         <template slot-scope="scope">
                             <el-image :src="scope.row.im_url">查看</el-image>
                         </template>
                     </el-table-column>
+                    <el-table-column label="删除资源" sortable>
+                        <template slot-scope="scope">
+                            <p style="color: blue" @click="delVideo(scope.row.res_id , scope.$index,videoReviewData)">
+                                删除</p>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column label="拉黑" sortable>
+                        <template slot-scope="scope">
+                            <p style="color: blue" @click="blackUser(scope.row.user_id )">拉黑</p>
+                        </template>
+                    </el-table-column>
+
                 </el-table>
             </template>
         </div>

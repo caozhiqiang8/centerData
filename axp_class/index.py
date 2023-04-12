@@ -3,7 +3,6 @@ from flask import  render_template, request
 from public.db_con import mysql_connect
 from axp_class import  axp_class_blue
 
-
 # 爱学派课堂分析
 @axp_class_blue.route('/classRoom', methods=['get'])
 def classRoom():
@@ -16,8 +15,9 @@ def classRoomInfo():
     code = request.values.get('code')
     print(code)
     sql = '''
-            SELECT c.class_id , c.class_name ,c.year  ,DATE_FORMAT(c.axp_begin_time,'%%Y-%%m-%%d') as axp_begin_time,DATE_FORMAT(c.axp_end_time,'%%Y-%%m-%%d') as axp_end_time ,fr.school_id ,fr.name  
-            from class_info c, franchised_school_info fr  where c.axp_end_time >  NOW()  and c.dc_school_id = fr.school_id  
+            SELECT c.class_id , c.class_name ,c.year  ,DATE_FORMAT(c.axp_begin_time,'%%Y-%%m-%%d') as axp_begin_time,DATE_FORMAT(c.axp_end_time,'%%Y-%%m-%%d') as axp_end_time ,fr.school_id ,fr.name  ,s.province,s.city
+            from class_info c, franchised_school_info fr  ,school_info s 
+			where c.axp_end_time >  NOW()  and c.dc_school_id = fr.school_id   and s.school_id = fr.school_id 
             and fr.school_id >50000 and fr.enable = 0  and fr.school_type in (3,4)  and c.pattern='行政班'
             ORDER BY fr.school_id, c.axp_end_time desc 
             '''
