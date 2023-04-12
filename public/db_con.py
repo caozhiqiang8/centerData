@@ -22,6 +22,7 @@ def mysql_connect(sql):
     return result
 
 sqllite_path =r'F:\PythonObject\DataCenterDB.sqlite3'
+# sqllite_path =r'D:\DataCenterDB.sqlite3'
 
 # 链接sqlite---dataFrame
 def sqlite_connect(sql):

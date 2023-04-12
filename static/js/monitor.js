@@ -24,7 +24,8 @@ var monitor = new Vue({
         //视频审核
         videoReviewData: '',
         videoReviewShow: false,
-        token:'',
+        userName: '',
+        token: '',
         dateVideo: '',
 
 
@@ -221,14 +222,17 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-            axios.post('/videoReview', {'date': this.dateVideo})
+
+            axios.post('/videoReview', {'date': this.dateVideo, 'userName': this.userName})
                 .then(data => {
                     this.videoReviewData = data.data.videoReviewData
                     this.token = data.data.user_token
                 })
                 .catch(err => (console.log((err))))
+
+
         },
-        delVideo(res_id,index,rows) {
+        delVideo(res_id, index, rows) {
             axios.get('https://school-cloud.ai-classes.com/api-service-resource/resources/delete-res?resId=' + res_id)
                 .then(data => {
                     console.log(data.data)
@@ -238,7 +242,7 @@ var monitor = new Vue({
                             message: '删除成功',
                             type: 'success'
                         });
-                        rows.splice(index,1)
+                        rows.splice(index, 1)
                     }
 
                 })
@@ -247,7 +251,7 @@ var monitor = new Vue({
         toVideo(res_id) {
             window.open('https://school-web.ai-classes.com/ecampus/resourcepreview/index.html?resId=' + res_id + '&token=' + this.token)
         },
-        blackUser(user_id){
+        blackUser(user_id) {
             axios.get('https://school-cloud.ai-classes.com/business-service-resource/file-uploads/black-user-insert?userId=' + user_id)
                 .then(data => {
                     console.log(data.data)

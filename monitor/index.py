@@ -236,22 +236,38 @@ def urlBox():
 # 视频审核
 @monitor_blue.route('/videoReview', methods=['post'])
 def videoReview():
-    date = json.loads(request.get_data())
-    date = date['date']
-    print('请求参数：' + date)
 
-    sql = '''
-    SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
-    ,(SELECT COUNT(*) FROM tp_j_course_resource_info tr WHERE tr.res_id = rs.res_id) "关联课程数量"
-    ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "im_url"
-    ,file_path
-    from rs_resource_info rs , user_info  u  ,oracle2utf.coschuser_info oc ,  franchised_school_info fr  
-    where rs.FILE_SUFFIXNAME = '.mp4'  and rs.user_id = u.user_id and oc.jid = u.ett_user_id and fr.school_id = u.dc_school_id   
-      and rs.c_time >='{} 00:00:00' and rs.c_time <'{} 23:59:59'
-    ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
-    '''.format(date,date)
-    data = mysql_connect(sql)
-    videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
+    data = json.loads(request.get_data())
+    date = data['date']
+    user_name = data['userName']
+    print('请求参数：' + date ,user_name )
+
+    if user_name :
+        sql = '''
+                        SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
+                        ,(SELECT COUNT(*) FROM tp_j_course_resource_info tr WHERE tr.res_id = rs.res_id) "关联课程数量"
+                        ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "im_url"
+                        ,file_path
+                        from rs_resource_info rs , user_info  u  ,oracle2utf.coschuser_info oc ,  franchised_school_info fr  
+                        where rs.FILE_SUFFIXNAME = '.mp4'  and rs.user_id = u.user_id and oc.jid = u.ett_user_id and fr.school_id = u.dc_school_id   
+                        and u.user_name = '{}'
+                        ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
+                        '''.format(user_name)
+        data = mysql_connect(sql)
+        videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
+    elif date:
+        sql = '''
+                SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
+                ,(SELECT COUNT(*) FROM tp_j_course_resource_info tr WHERE tr.res_id = rs.res_id) "关联课程数量"
+                ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "im_url"
+                ,file_path
+                from rs_resource_info rs , user_info  u  ,oracle2utf.coschuser_info oc ,  franchised_school_info fr  
+                where rs.FILE_SUFFIXNAME = '.mp4'  and rs.user_id = u.user_id and oc.jid = u.ett_user_id and fr.school_id = u.dc_school_id   
+                  and rs.c_time >='{} 00:00:00' and rs.c_time <'{} 23:59:59'
+                ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
+                '''.format(date, date)
+        data = mysql_connect(sql)
+        videoReviewData = json.loads(data.to_json(orient='records', force_ascii=False))
 
     user_token = token()
 
