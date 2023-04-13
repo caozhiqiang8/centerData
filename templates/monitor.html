@@ -4,6 +4,18 @@
 
 
 {% block css %}
+    <style>
+        .el-checkbox__inner {
+            width: 50px;
+            height: 60px;
+        }
+
+        .el-checkbox__inner::after {
+            top: 25px;
+            left: 22px
+        }
+
+    </style>
 {% endblock %}
 
 {% block tabs %}
@@ -183,10 +195,11 @@
                         v-loading="loading"
                         element-loading-text="拼命加载中"
                         @selection-change="handleSelectionChange"
+
                 >
                     <el-table-column
                             type="selection"
-                            width="55">
+                            width="80">
                     </el-table-column>
 
                     <el-table-column prop="res_id" label="ID" sortable></el-table-column>
@@ -237,7 +250,7 @@
                     :before-close="handleClose">
                 <el-input
                         type="textarea"
-                        :rows="2"
+                        :rows="20"
                         v-model="resId">
                 </el-input>
                 <span slot="footer" class="dialog-footer">

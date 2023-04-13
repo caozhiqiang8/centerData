@@ -316,6 +316,7 @@ var monitor = new Vue({
 
         },
         handleClose(done) {
+            this.dialogVisible = false
         },
         urlCostTimeEycharts(model_name, x_data, y_data) {
 
