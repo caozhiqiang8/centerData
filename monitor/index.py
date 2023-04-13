@@ -1,9 +1,10 @@
 import json
 import pandas as pd
 from flask import render_template, request
-from public.db_con import es_connect,mysql_connect
+from public.db_con import es_connect, mysql_connect
 from monitor import monitor_blue
 from public.token import token
+
 
 # 数据监控路由
 @monitor_blue.route('/monitor', methods=['get'])
@@ -236,44 +237,40 @@ def urlBox():
 # 视频审核
 @monitor_blue.route('/videoReview', methods=['post'])
 def videoReview():
-
     data = json.loads(request.get_data())
     date = data['date']
-    user_name = data['userName']
-    print('请求参数：' + date ,user_name )
+    user_id = data['userId']
+    print('请求参数：' + date, user_id)
 
-    if user_name :
+    if user_id:
         sql = '''
-                        SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
-                        ,(SELECT COUNT(*) FROM tp_j_course_resource_info tr WHERE tr.res_id = rs.res_id) "关联课程数量"
-                        ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "im_url"
-                        ,file_path
-                        from rs_resource_info rs , user_info  u  ,oracle2utf.coschuser_info oc ,  franchised_school_info fr  
-                        where rs.FILE_SUFFIXNAME = '.mp4'  and rs.user_id = u.user_id and oc.jid = u.ett_user_id and fr.school_id = u.dc_school_id   
-                        and u.user_name = '{}'
-                        ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
-                        '''.format(user_name)
+    SELECT  rs.res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "file_size",DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "img_url",file_path  ,u.user_name ,u.user_id ,u.ett_user_id  ,u.dc_school_id ,s.name ,ti.teacher_name , si.STU_NAME
+    from rs_resource_info rs LEFT JOIN user_info u on u.user_id = rs.user_id   
+    LEFT JOIN  school_info s on u.dc_school_id  = s.school_id
+    left JOIN  student_info si on si.user_id = u.ref 
+    left JOIN  teacher_info ti on ti.user_id = u.ref
+    where rs.res_id < 0  and rs.FILE_SUFFIXNAME = '.mp4' and u.user_id = '{}'
+    ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
+     '''.format(user_id)
         data_video = mysql_connect(sql)
     elif date:
         sql = '''
-                SELECT res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "文件大小(G)" ,rs.DC_SCHOOL_ID,fr.name,u.user_id ,u.ett_user_id,oc.user_name ,oc.password,  DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time   ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001.mp4") "mp4_url",(SELECT COUNT(*)  FROM tp_task_info WHERE task_value_id = rs.res_id) "发布任务数量"
-                ,(SELECT COUNT(*) FROM tp_j_course_resource_info tr WHERE tr.res_id = rs.res_id) "关联课程数量"
-                ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "im_url"
-                ,file_path
-                from rs_resource_info rs , user_info  u  ,oracle2utf.coschuser_info oc ,  franchised_school_info fr  
-                where rs.FILE_SUFFIXNAME = '.mp4'  and rs.user_id = u.user_id and oc.jid = u.ett_user_id and fr.school_id = u.dc_school_id   
-                  and rs.c_time >='{} 00:00:00' and rs.c_time <'{} 23:59:59'
+                SELECT  rs.res_id ,res_name,ROUND(rs.file_size/1024/1024/1024,2) "file_size",DATE_FORMAT(rs.c_time,'%%Y-%%m-%%d %%H:%%i:%%S') as c_time ,CONCAT("https://cdn1-school.ai-classes.com/fpupload/",file_path,"001_pre.jpg") "img_url",file_path  ,u.user_name ,u.user_id ,u.ett_user_id  ,u.dc_school_id ,s.name ,ti.teacher_name , si.STU_NAME
+                from rs_resource_info rs LEFT JOIN user_info u on u.user_id = rs.user_id   
+                LEFT JOIN  school_info s on u.dc_school_id  = s.school_id
+                left JOIN  student_info si on si.user_id = u.ref 
+                left JOIN  teacher_info ti on ti.user_id = u.ref
+                where rs.res_id < 0 and rs.FILE_SUFFIXNAME = '.mp4'  and rs.c_time >='{} 00:00:00' and rs.c_time <='{} 23:59:59'
                 ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
                 '''.format(date, date)
         data_video = mysql_connect(sql)
     videoCount = int(data_video['res_id'].count())
-
     videoReviewData = json.loads(data_video.to_json(orient='records', force_ascii=False))
 
     user_token = token()
     data = {
-        'videoReviewData':videoReviewData,
-        'videoCount':videoCount,
-        'user_token':user_token
+        'videoReviewData': videoReviewData,
+        'videoCount': videoCount,
+        'user_token': user_token
     }
     return data

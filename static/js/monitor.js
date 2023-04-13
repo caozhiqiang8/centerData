@@ -24,10 +24,11 @@ var monitor = new Vue({
         //视频审核
         videoReviewData: '',
         videoReviewShow: true,
-        videoCount:0,
-        userName: '',
+        videoCount: 0,
+        userId: '',
         token: '',
         dateVideo: '',
+        multipleSelection: [],
 
     },
     methods: {
@@ -222,16 +223,25 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-            this.loading = true
-            axios.post('/videoReview', {'date': this.dateVideo, 'userName': this.userName})
-                .then(data => {
-                    this.videoReviewData = data.data.videoReviewData
-                    this.token = data.data.user_token
-                    this.videoCount = data.data.videoCount
-                    console.log(data.data.videoCount)
-                    this.loading = false
-                })
-                .catch(err => (console.log((err))))
+            if (this.dateVideo == '') {
+                this.$notify({
+                    title: '警告',
+                    message: '请选择日期或输入用户名查询',
+                    type: 'warning'
+                });
+
+            } else {
+                this.loading = true
+                axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId})
+                    .then(data => {
+                        this.videoReviewData = data.data.videoReviewData
+                        this.token = data.data.user_token
+                        this.videoCount = data.data.videoCount
+                        console.log(data.data.videoCount)
+                        this.loading = false
+                    })
+                    .catch(err => (console.log((err))))
+            }
 
 
         },
@@ -240,12 +250,14 @@ var monitor = new Vue({
                 .then(data => {
                     console.log(data.data)
                     if (data.data.code == 1) {
+                        rows.splice(index, 1)
+                        this.videoCount = this.videoCount - 1
                         this.$notify({
                             title: '成功',
                             message: '删除成功',
                             type: 'success'
                         });
-                        rows.splice(index, 1)
+
                     }
 
                 })
@@ -270,7 +282,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
-        remindUser(user_id){
+        remindUser(user_id) {
             axios.get('https://school-cloud.ai-classes.com/api-service-general/users/remind-user-password?userId=' + user_id)
                 .then(data => {
                     console.log(data.data)
@@ -286,7 +298,30 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        getResIdList() {
+            var resIdList = new Array()
+            this.multipleSelection.map((item, index, arr) => {
+                console.log(item.res_id)
+                resIdList.push(item.res_id)
 
+            })
+            this.$alert(resIdList, '已经选中的资源列表', {
+                confirmButtonText: '关闭',
+            });
+
+        },
         urlCostTimeEycharts(model_name, x_data, y_data) {
 
             var myChart = echarts.init(document.getElementById('urlCostTime'));

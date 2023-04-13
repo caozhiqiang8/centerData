@@ -16,11 +16,11 @@
         {# 二级导航 #}
         <template>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                 <el-tab-pane label="视频审核" name="five"></el-tab-pane>
+                <el-tab-pane label="视频审核" name="five"></el-tab-pane>
                 <el-tab-pane label="行为日志" name="first"></el-tab-pane>
                 <el-tab-pane label="接口调用" name="second"></el-tab-pane>
                 <el-tab-pane label="响应时长" name="fourth"></el-tab-pane>
-                <el-tab-pane label="url分析" name="third"></el-tab-pane>
+                {#                <el-tab-pane label="url分析" name="third"></el-tab-pane>#}
 
             </el-tabs>
         </template>
@@ -157,58 +157,71 @@
                             value-format="yyyy-MM-dd">
                     </el-date-picker>
                     {#      用户名搜索资源          #}
-                    <el-input v-model="userName" style="width: 220px;margin-top: 10px"
+                    <el-input v-model="userId" style="width: 220px;margin-top: 10px"
                               placeholder="输入用户名查找全部资源"></el-input>
                     <el-row style="float: right;margin-top: 10px">
                         <el-button type="primary" @click="getVideoReview">查询</el-button>
                     </el-row>
                 </div>
 
-                <p>资源总数： [[ videoCount ]]</p>
+                <div>
+                    <p style="float: left">资源总数： [[ videoCount ]]</p>
+                    <el-row style="float: right">
+                        <el-button  @click="toggleSelection()" >取消所有选中</el-button>
+                        <el-button type="primary" @click="getResIdList" >查看全部选中资源</el-button>
+
+                    </el-row>
+                </div>
+
                 <el-table
-                        style="margin-top: 20px"
+                        style="margin-top: 20px;width: 100%"
                         :data="videoReviewData"
                         border
                         stripe
-                        style="width: 100%"
+                        ref="multipleTable"
                         empty-text="点击查询，请耐心等待..."
                         :default-sort="{prop: 'date', order: 'descending'}"
                         v-loading="loading"
                         element-loading-text="拼命加载中"
+                        @selection-change="handleSelectionChange"
                 >
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+
                     <el-table-column prop="res_id" label="ID" sortable></el-table-column>
-                    <el-table-column prop="文件大小(G)" label="文件大小" sortable></el-table-column>
+                    <el-table-column prop="file_size" label="文件大小" sortable></el-table-column>
                     <el-table-column prop="name" label="学校" sortable></el-table-column>
-                    <el-table-column prop="user_name" label="用户名" sortable></el-table-column>
-                    <el-table-column prop="password" label="密码" sortable></el-table-column>
+                    <el-table-column prop="user_id" label="用户ID" sortable></el-table-column>
+                    <el-table-column prop="teacher_name" label="教师姓名" sortable></el-table-column>
+                    <el-table-column prop="STU_NAME" label="学生姓名" sortable></el-table-column>
                     <el-table-column prop="c_time" label="时间" sortable></el-table-column>
-                    {#                    <el-table-column prop="mp4_url" label="文件地址" sortable></el-table-column>#}
                     </el-table-column>
                     <el-table-column prop="res_id" label="资源名称" sortable>
                         <template slot-scope="scope">
-                            <p style="color: blue" @click="toVideo(scope.row.res_id)"> [[ scope.row.res_name]]</p>
+                            <p style="color: blue;height: 200px;line-height: 200px"
+                               @click="toVideo(scope.row.res_id)">
+                                [[ scope.row.res_name]]</p>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="im_url" label="预览图" width="400" sortable>
+
+                    <el-table-column prop="img_url" label="预览图" width="400" sortable>
                         <template slot-scope="scope">
-                            <el-image :src="scope.row.im_url">查看</el-image>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="删除资源" sortable>
-                        <template slot-scope="scope">
-                            <p style="color: blue" @click="delVideo(scope.row.res_id , scope.$index,videoReviewData)">
-                                删除</p>
+                            <el-image :src="scope.row.img_url">查看</el-image>
                         </template>
                     </el-table-column>
 
                     <el-table-column label="拉黑" sortable>
                         <template slot-scope="scope">
-                            <p style="color: blue" @click="blackUser(scope.row.user_id )">拉黑</p>
+                            <p style="color: blue;height: 200px;line-height: 200px"
+                               @click="blackUser(scope.row.user_id )">拉黑</p>
                         </template>
                     </el-table-column>
                     <el-table-column label="强改密" sortable>
                         <template slot-scope="scope">
-                            <p style="color: blue" @click="remindUser(scope.row.user_id )">强改密</p>
+                            <p style="color: blue;height: 200px;line-height: 200px"
+                               @click="remindUser(scope.row.user_id )">强改密</p>
                         </template>
                     </el-table-column>
 
