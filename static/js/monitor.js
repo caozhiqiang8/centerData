@@ -29,6 +29,8 @@ var monitor = new Vue({
         token: '',
         dateVideo: '',
         multipleSelection: [],
+        dialogVisible: false,
+        resId: '',
 
     },
     methods: {
@@ -223,14 +225,7 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-            if (this.dateVideo == '') {
-                this.$notify({
-                    title: '警告',
-                    message: '请选择日期或输入用户名查询',
-                    type: 'warning'
-                });
-
-            } else {
+            if (this.dateVideo != '' || this.userId != '') {
                 this.loading = true
                 axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId})
                     .then(data => {
@@ -311,16 +306,16 @@ var monitor = new Vue({
             this.multipleSelection = val;
         },
         getResIdList() {
+            this.dialogVisible = true
             var resIdList = new Array()
-            this.multipleSelection.map((item, index, arr) => {
-                console.log(item.res_id)
+            this.multipleSelection.map((item) => {
                 resIdList.push(item.res_id)
-
-            })
-            this.$alert(resIdList, '已经选中的资源列表', {
-                confirmButtonText: '关闭',
             });
+            resIdList = resIdList.join(',')
+            this.resId = resIdList
 
+        },
+        handleClose(done) {
         },
         urlCostTimeEycharts(model_name, x_data, y_data) {
 

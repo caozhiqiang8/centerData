@@ -167,9 +167,8 @@
                 <div>
                     <p style="float: left">资源总数： [[ videoCount ]]</p>
                     <el-row style="float: right">
-                        <el-button  @click="toggleSelection()" >取消所有选中</el-button>
-                        <el-button type="primary" @click="getResIdList" >查看全部选中资源</el-button>
-
+                        <el-button @click="toggleSelection()">取消所有选中</el-button>
+                        <el-button type="primary" @click="getResIdList">查看全部选中资源</el-button>
                     </el-row>
                 </div>
 
@@ -230,6 +229,21 @@
                 <el-backtop></el-backtop>
 
             </template>
+            {#        浮层    #}
+            <el-dialog
+                    title="已选中的资源列表"
+                    :visible.sync="dialogVisible"
+                    width="30%"
+                    :before-close="handleClose">
+                <el-input
+                        type="textarea"
+                        :rows="2"
+                        v-model="resId">
+                </el-input>
+                <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+              </span>
+            </el-dialog>
 
         </div>
 

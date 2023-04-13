@@ -249,7 +249,7 @@ def videoReview():
     LEFT JOIN  school_info s on u.dc_school_id  = s.school_id
     left JOIN  student_info si on si.user_id = u.ref 
     left JOIN  teacher_info ti on ti.user_id = u.ref
-    where rs.res_id < 0  and rs.FILE_SUFFIXNAME = '.mp4' and u.user_id = '{}'
+    where rs.res_id < 0  and s.school_id != 51286 and rs.FILE_SUFFIXNAME = '.mp4' and u.user_id = '{}'
     ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
      '''.format(user_id)
         data_video = mysql_connect(sql)
@@ -260,7 +260,7 @@ def videoReview():
                 LEFT JOIN  school_info s on u.dc_school_id  = s.school_id
                 left JOIN  student_info si on si.user_id = u.ref 
                 left JOIN  teacher_info ti on ti.user_id = u.ref
-                where rs.res_id < 0 and rs.FILE_SUFFIXNAME = '.mp4'  and rs.c_time >='{} 00:00:00' and rs.c_time <='{} 23:59:59'
+                where rs.res_id < 0  and s.school_id != 51286 and rs.FILE_SUFFIXNAME = '.mp4'  and rs.c_time >='{} 00:00:00' and rs.c_time <='{} 23:59:59'
                 ORDER BY  u.dc_school_id  ,u.user_id,rs.c_time desc 
                 '''.format(date, date)
         data_video = mysql_connect(sql)
