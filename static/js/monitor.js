@@ -26,6 +26,7 @@ var monitor = new Vue({
         videoReviewShow: true,
         videoCount: 0,
         userId: '',
+        schoolId: '',
         token: '',
         dateVideo: '',
         multipleSelection: [],
@@ -225,9 +226,9 @@ var monitor = new Vue({
 
         },
         getVideoReview() {
-            if (this.dateVideo != '' || this.userId != '') {
+            if (this.dateVideo != '' || this.userId != '' ||this.schoolId != '' ) {
                 this.loading = true
-                axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId})
+                axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId,'schoolId':this.schoolId})
                     .then(data => {
                         this.videoReviewData = data.data.videoReviewData
                         this.token = data.data.user_token

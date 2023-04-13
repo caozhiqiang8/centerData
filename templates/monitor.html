@@ -170,7 +170,9 @@
                     </el-date-picker>
                     {#      用户名搜索资源          #}
                     <el-input v-model="userId" style="width: 220px;margin-top: 10px"
-                              placeholder="输入用户名查找全部资源"></el-input>
+                              placeholder="输入用户ID查找"></el-input>
+                    <el-input v-model="schoolId" style="width: 220px;margin-top: 10px"
+                              placeholder="学校ID"></el-input>
                     <el-row style="float: right;margin-top: 10px">
                         <el-button type="primary" @click="getVideoReview">查询</el-button>
                     </el-row>
@@ -205,6 +207,7 @@
                     <el-table-column prop="res_id" label="ID" sortable></el-table-column>
                     <el-table-column prop="file_size" label="文件大小" sortable></el-table-column>
                     <el-table-column prop="name" label="学校" sortable></el-table-column>
+                    <el-table-column prop="dc_school_id" label="学校ID" sortable></el-table-column>
                     <el-table-column prop="user_id" label="用户ID" sortable></el-table-column>
                     <el-table-column prop="teacher_name" label="教师姓名" sortable></el-table-column>
                     <el-table-column prop="STU_NAME" label="学生姓名" sortable></el-table-column>
