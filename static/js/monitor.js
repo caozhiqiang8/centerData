@@ -32,6 +32,12 @@ var monitor = new Vue({
         multipleSelection: [],
         dialogVisible: false,
         resId: '',
+        // 默认显示第几页
+        currentPage: 1,
+        // 默认每页显示的条数（可修改）
+        PageSize: 5,
+        // 个数选择器（可修改）
+        pageSizes: [5, 10, 50, 100, 150, 200],
 
     },
     methods: {
@@ -79,6 +85,7 @@ var monitor = new Vue({
 
             }
         },
+        //用户行为日志
         onSubmit() {
             this.loading = true
             axios.post('/userAction', {'jid': this.jid})
@@ -89,6 +96,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        //获取接口调用
         getUrlData() {
             this.loading = true
             axios.post('/urlCall', {'date': this.date})
@@ -99,6 +107,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        //url箱型盒子
         getUrlBox() {
             axios.get('/urlBox')
                 .then(data => {
@@ -107,6 +116,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        // url箱型盒子
         urlBoxEycharts() {
             var myChart = echarts.init(document.getElementById('urlBox'));
             var option = {
@@ -202,6 +212,7 @@ var monitor = new Vue({
             myChart.setOption(option);
 
         },
+        //接口响应时长
         getConstTimeData() {
             this.loading = true
             if (this.date == '') {
@@ -211,7 +222,6 @@ var monitor = new Vue({
             } else {
                 axios.post('/userAction', {'date': this.date, 'time': this.time})
                     .then(data => {
-
                         this.model_name = data.data.model_name
                         this.x_data = data.data.x_data
                         this.y_data = data.data.y_data
@@ -225,10 +235,11 @@ var monitor = new Vue({
             }
 
         },
+        //获取资源
         getVideoReview() {
-            if (this.dateVideo != '' || this.userId != '' ||this.schoolId != '' ) {
+            if (this.dateVideo != '' || this.userId != '' || this.schoolId != '') {
                 this.loading = true
-                axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId,'schoolId':this.schoolId})
+                axios.post('/videoReview', {'date': this.dateVideo, 'userId': this.userId, 'schoolId': this.schoolId})
                     .then(data => {
                         this.videoReviewData = data.data.videoReviewData
                         this.token = data.data.user_token
@@ -241,6 +252,7 @@ var monitor = new Vue({
 
 
         },
+        //删除资源
         delVideo(res_id, index, rows) {
             axios.get('https://school-cloud.ai-classes.com/api-service-resource/resources/delete-res?resId=' + res_id)
                 .then(data => {
@@ -259,9 +271,11 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        //跳转地址
         toVideo(res_id) {
             window.open('https://school-web.ai-classes.com/ecampus/resourcepreview/index.html?resId=' + res_id + '&token=' + this.token)
         },
+        //拉黑用户
         blackUser(user_id) {
             axios.get('https://school-cloud.ai-classes.com/business-service-resource/file-uploads/black-user-insert?userId=' + user_id)
                 .then(data => {
@@ -278,6 +292,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        //强改密
         remindUser(user_id) {
             axios.get('https://school-cloud.ai-classes.com/api-service-general/users/remind-user-password?userId=' + user_id)
                 .then(data => {
@@ -294,6 +309,7 @@ var monitor = new Vue({
                 })
                 .catch(err => (console.log((err))))
         },
+        //表格复选
         toggleSelection(rows) {
             if (rows) {
                 rows.forEach(row => {
@@ -306,6 +322,7 @@ var monitor = new Vue({
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
+        // 获取复选框中的资源列表ID
         getResIdList() {
             this.dialogVisible = true
             var resIdList = new Array()
@@ -319,6 +336,22 @@ var monitor = new Vue({
         handleClose(done) {
             this.dialogVisible = false
         },
+
+        // 每页显示的条数
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            // 改变每页显示的条数
+            this.PageSize = val
+            // 注意：在改变每页显示的条数时，要将页码显示到第一页
+            this.currentPage = 1
+        },
+        // 显示第几页
+        handleCurrentChange(val) {
+
+            this.currentPage = val
+            console.log(`当前页: ${val}`);
+        },
+        // 响应时长散点图
         urlCostTimeEycharts(model_name, x_data, y_data) {
 
             var myChart = echarts.init(document.getElementById('urlCostTime'));

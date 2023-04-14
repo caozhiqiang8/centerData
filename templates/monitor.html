@@ -188,7 +188,7 @@
 
                 <el-table
                         style="margin-top: 20px;width: 100%"
-                        :data="videoReviewData"
+                        :data="videoReviewData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
                         border
                         stripe
                         ref="multipleTable"
@@ -243,6 +243,15 @@
                 </el-table>
                 {#    回到顶部 #}
                 <el-backtop></el-backtop>
+                 <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="pageSizes"
+                                :page-size="PageSize"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="videoReviewData.length">
+                        </el-pagination>
 
             </template>
             {#        浮层    #}
