@@ -89,8 +89,8 @@ def download():
     df = pd.json_normalize(data)
 
     # 获取下载文件路径
-    dir = os.path.abspath('.')
-    path = r'{}/static/file/'.format(dir)
+    path = '{}\\static\\file\\'.format(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
     # 数据保存到下载路径
     df.to_excel('{}学校帐号密码.xlsx'.format(path))
 

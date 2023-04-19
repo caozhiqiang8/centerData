@@ -21,7 +21,7 @@ def mysql_connect(sql):
     result = pd.read_sql_query(sql=sql, con=engine)
     return result
 
-sqllite_path =r'F:\PythonObject\DataCenterDB.sqlite3'
+sqllite_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),'DataCenterDB.sqlite3')
 # sqllite_path =r'D:\DataCenterDB.sqlite3'
 
 # 链接sqlite---dataFrame
@@ -64,7 +64,10 @@ def write_Sqlite(df, table_name, if_exists):
 
 
 if __name__ == '__main__':
-
-    print(sys.argv[0])
-    print(os.path.abspath('..\\DataCenterDB.sqlite3'))
-    print(os.path.abspath(__file__))
+    sqllite_path = r'F:\PythonObject\DataCenterDB.sqlite3'
+    static = '{}\\static\\file\\'.format(os.path.dirname(os.path.realpath(__file__)))
+    print(static)
+    print('当前路径',os.path.realpath(__file__))
+    print('当前路径上上一级',os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+    print(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),'DataCenterDB.sqlite3'))
+    print(os.path.join(os.path.dirname(os.path.realpath(__file__)),static))

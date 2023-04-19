@@ -209,13 +209,14 @@
                     <el-table-column prop="name" label="学校" sortable></el-table-column>
                     <el-table-column prop="dc_school_id" label="学校ID" sortable></el-table-column>
                     <el-table-column prop="user_id" label="用户ID" sortable></el-table-column>
+                    <el-table-column prop="user_name" label="用户名" sortable></el-table-column>
                     <el-table-column prop="teacher_name" label="教师姓名" sortable></el-table-column>
                     <el-table-column prop="STU_NAME" label="学生姓名" sortable></el-table-column>
                     <el-table-column prop="c_time" label="时间" sortable></el-table-column>
-                    </el-table-column>
+
                     <el-table-column prop="res_id" label="资源名称" sortable>
                         <template slot-scope="scope">
-                            <p style="color: blue;height: 200px;line-height: 200px"
+                            <p style="color: blue"
                                @click="toVideo(scope.row.res_id)">
                                 [[ scope.row.res_name]]</p>
                         </template>
@@ -243,15 +244,17 @@
                 </el-table>
                 {#    回到顶部 #}
                 <el-backtop></el-backtop>
-                 <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
-                                :page-sizes="pageSizes"
-                                :page-size="PageSize"
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="videoReviewData.length">
-                        </el-pagination>
+                {#      分页       #}
+
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="pageSizes"
+                        :page-size="PageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="videoReviewData.length">
+                </el-pagination>
 
             </template>
             {#        浮层    #}

@@ -35,9 +35,9 @@ var monitor = new Vue({
         // 默认显示第几页
         currentPage: 1,
         // 默认每页显示的条数（可修改）
-        PageSize: 5,
+        PageSize: 25,
         // 个数选择器（可修改）
-        pageSizes: [5, 10, 50, 100, 150, 200],
+        pageSizes: [10, 25, 50, 100, 150, 200],
 
     },
     methods: {
@@ -246,6 +246,7 @@ var monitor = new Vue({
                         this.videoCount = data.data.videoCount
                         console.log(data.data.videoCount)
                         this.loading = false
+                        this.currentPage =1
                     })
                     .catch(err => (console.log((err))))
             }
@@ -336,7 +337,6 @@ var monitor = new Vue({
         handleClose(done) {
             this.dialogVisible = false
         },
-
         // 每页显示的条数
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

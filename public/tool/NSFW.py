@@ -1,15 +1,28 @@
+import os,shutil
 from PIL import Image
 
 
+dir_path = r'F:\PythonObject\DataCenter\nwsf'
+file_name_list = os.listdir(dir_path)
+yellow_path = r'F:\PythonObject\DataCenter\nwsf\yellow'
 
-t_img = Image.open(r'C:\Users\caozhiqiang\Downloads\001_pre (4).jpg').convert("YCbCr")  # 参数传入图片，引入转换成YUV模式图片
-w, h = t_img.size  # 像素
-sx = t_img.getdata()  # 像素数据
-count = 0
-for i, ycbcr in enumerate(sx):
-    y, cb, cr = ycbcr
-    if 86 <= cb <= 117 and 140 <= cr <= 168:
-        count += 1
-# print count,w * h
-print(" 这%s一个色图." % ("是" if count > w * h * 0.3 else "不是"))
+for file_name in file_name_list:
+    file_path = os.path.join(dir_path, file_name)
+    try:
+        img = Image.open(file_path).convert('YCbCr')
+        w, h = img.size
+        data = img.getdata()
+        cnt = 0
+        for i, ycbcr in enumerate(data):
+            y, cb, cr = ycbcr
+            if 86 <= cb <= 117 and 140 <= cr <= 168:
+                cnt += 1
+        if cnt > w * h * 0.1:
+            print('%s 是 黄图:' %file_name)
+            shutil.copy(file_path,yellow_path)
+        else:
+            pass
+    except:
+        pass
 
+print('分类完毕')
