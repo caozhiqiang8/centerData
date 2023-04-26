@@ -1,17 +1,28 @@
 import json
+import requests
 from elasticsearch import Elasticsearch
 from sqlalchemy import create_engine
 import pandas as pd
 import sqlite3
-import  os,sys
+import  os
 
-# 链接ES
+# 链接测试ES
 def es_connect(index, body):
     es_hosts = str("69.230.239.155,43.192.117.34").split(",")
     es = Elasticsearch(es_hosts)
     res = es.search(index=index, body=body)
     res = json.loads(json.dumps(res))
     return res
+
+def es_formal_connect(body,index):
+    HEADERS = {
+        'Content-Type': 'application/json',
+        'kbn-xsrf': 'true',
+    }
+    url = 'http://52.82.30.42:5601/api/console/proxy?path={}/_search&method=POST'.format(index)
+    res = requests.post(url=url, verify='path', auth=('kibana', 'etiantian2018!'), data=body, headers=HEADERS)
+    res = json.loads(res.text)
+    return  res
 
 
 # 链接mysql -----dataFrame

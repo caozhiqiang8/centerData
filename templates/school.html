@@ -26,45 +26,92 @@
 {% block body %}
 
     <div id="task" style="margin: 50px 200px">
-        {# 二级导航 #}
+    {# 二级导航 #}
+    <template>
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="学校信息" name="second"></el-tab-pane>
+            <el-tab-pane label="校群教师数据" name="first"></el-tab-pane>
+            <el-tab-pane label="期待" name="third"></el-tab-pane>
+            <el-tab-pane label="期待" name="fourth"></el-tab-pane>
+        </el-tabs>
+    </template>
+
+    {#        学校类型    #}
+    <el-card class="box-card" v-show="schoolTypeShow">
+        <div id="schoolType" style='width:1400px;height:700px;margin: 0px auto;'></div>
+    </el-card>
+
+    {#    学校信息     #}
+    <div style="margin-top: 20px" v-show="schoolInfoShow">
+        <div class="block" style="width: 300px">
+            <el-input v-model="school_name" style="width: 220px;margin-top: 10px"
+                      placeholder="学校名称"></el-input>
+            <el-input v-model="school_id" style="width: 220px;margin-top: 10px"
+                      placeholder="学校ID"></el-input>
+            <el-row style="margin-top: 10px">
+                <el-button type="primary" @click="schoolInfo()">查询</el-button>
+            </el-row>
+
+        </div>
+
         <template>
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="学校信息" name="second"></el-tab-pane>
-                <el-tab-pane label="期待" name="first"></el-tab-pane>
-                <el-tab-pane label="期待" name="third"></el-tab-pane>
-                <el-tab-pane label="期待" name="fourth"></el-tab-pane>
-            </el-tabs>
+            <el-table
+                    style="margin-top: 20px;width: 100%"
+                    :data="schooldata"
+                    border
+                    stripe
+                    style="width: 100%"
+                    :default-sort="{prop: 'date', order: 'descending'}"
+                    empty-text="请输入要查询的学校"
+                    element-loading-background="rgba(0, 0, 0, 0.5)"
+            >
+
+                <el-table-column v-for="column in tableColumns"
+                                 :key="column.prop"
+                                 :prop="column.prop"
+                                 :label="column.label" sortable>
+
+                </el-table-column>
+
+            </el-table>
+            {#    回到顶部 #}
+            <el-backtop></el-backtop>
         </template>
+    </div>
 
-        {#        学校类型    #}
-        <el-card class="box-card" v-show="schoolTypeShow">
-            <div id="schoolType" style='width:1400px;height:700px;margin: 0px auto;'></div>
-        </el-card>
+    {#    校群教师数据    #}
+    <div style="margin-top: 20px" v-show="schoolSgShow">
+        <div style="width: 300px">
+            <el-input v-model="sg_id" style="width: 220px;margin-top: 10px" placeholder="校群ID"></el-input>
+            <el-row style="margin-top: 10px">
+                <el-button type="primary" @click="sgSchoolData()">查询</el-button>
+            </el-row>
+        </div>
 
-        {#   学校信息     #}
-        <div style="margin-top: 50px" v-show="schoolInfoShow">
+
+        <div style="margin-top: 20px">
             <template>
                 <el-table
-                        :data="schooldata"
+                        :data="sgData"
                         border
                         stripe
                         style="width: 100%"
+                        empty-text="输入校群ID查询"
                         :default-sort="{prop: 'date', order: 'descending'}"
-                        empty-text="数据加载中......"
-                        element-loading-background="rgba(0, 0, 0, 0.5)"
                 >
-
-                    <el-table-column v-for="column in tableColumns"
-                                     :key="column.prop"
-                                     :prop="column.prop"
-                                     :label="column.label" sortable>
-
-                    </el-table-column>
+                    <el-table-column prop="用户ID" label="用户ID" sortable></el-table-column>
+                    <el-table-column prop="教师姓名" label="教师姓名" sortable></el-table-column>
+                    <el-table-column prop="学校名称" label="学校名称" sortable></el-table-column>
+                    <el-table-column prop="任务总数" label="任务总数" sortable></el-table-column>
+                    <el-table-column prop="课程总数" label="课程总数" sortable></el-table-column>
+                    <el-table-column prop="上传资源次数" label="上传资源次数" sortable></el-table-column>
+                    <el-table-column prop="下载资源次数" label="下载资源次数" sortable></el-table-column>
+                    <el-table-column prop="浏览次数" label="浏览次数" sortable></el-table-column>
+                    <el-table-column prop="收藏资源数" label="收藏资源数" sortable></el-table-column>
 
                 </el-table>
-                {#    回到顶部 #}
-                <el-backtop></el-backtop>
             </template>
+
         </div>
 
     </div>

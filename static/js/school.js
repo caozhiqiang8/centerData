@@ -45,13 +45,23 @@ var tabs = new Vue({
             },
 
         ],
+        school_name: '',
+        school_id: '',
+        schoolSgShow: false,
+        sg_id: '',
+        sgData: '',
     },
     methods: {
         handleClick(tab, event) {
             console.log(tab.name, event);
             if (tab.name === 'second') {
                 this.schoolInfoShow = true
-                this.schoolInfo()
+                this.schoolSgShow = false
+
+            }
+            if (tab.name === 'first') {
+                this.schoolInfoShow = false
+                this.schoolSgShow = true
 
             }
         },
@@ -177,17 +187,32 @@ var tabs = new Vue({
 
         },
         schoolInfo() {
-            axios.get('/schoolInfo')
-                .then(data => {
-                        this.schooldata = data.data.schoolInfo
-                    }
-                )
-                .catch(err => (console.log(err)))
+            if (this.school_name == '' || this.school_id == '') {
+                console.log('请输入学校名称或id')
+            } else {
+                axios.post('/schoolInfo', {'school_name': this.school_name, 'school_id': this.school_id})
+                    .then(data => {
+                            this.schooldata = data.data.schoolInfo
+                        }
+                    )
+                    .catch(err => (console.log(err)))
+            }
+
+        },
+        sgSchoolData() {
+            if (this.sg_id != '') {
+                axios.post('/sgData', {'sg_id': this.sg_id})
+                    .then(data => {
+                        this.sgData = data.data.sg_data
+                    })
+                    .catch(err => (console.log(err)))
+            }
+
         }
 
     },
     mounted() {
-        this.schoolInfo()
+
     }
 
 })

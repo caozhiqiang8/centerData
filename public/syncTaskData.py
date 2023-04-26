@@ -3,7 +3,7 @@ import json
 import time
 import pandas as pd
 import requests
-from public.db_con import mysql_connect, sqlite_connect, write_Sqlite
+from public.db_con import mysql_connect, sqlite_connect, write_Sqlite,es_formal_connect
 from public.df_merge import df_merge
 from public.record_time import cost_time
 from public.school_crm import school_crm
@@ -211,10 +211,9 @@ def task_zp(time):
 @cost_time
 def school_info():
     sql = '''    
-    SELECT s.school_id,s.name,s.province,s.city, fr.c_time , fr.validity_time ,s.ip,uu.user_name,uu.password FROM oracle2utf.coschuser_info uu,user_info u,j_role_user ru,school_info s , franchised_school_info fr 
+    SELECT s.school_id,s.name,s.province,s.city,fr.school_type, fr.c_time , fr.validity_time ,s.ip,uu.user_name,uu.password FROM oracle2utf.coschuser_info uu,user_info u,j_role_user ru,school_info s , franchised_school_info fr 
         WHERE uu.jid = u.ett_user_id
         and fr.school_id = s.school_id 
-        and fr.school_type  in (3,4 )
           AND u.dc_school_id = s.school_id
           AND u.ref = ru.user_id
           AND ru.role_id = 4
@@ -293,7 +292,7 @@ def year_province_count():
     # return year_province_df
 
 @cost_time
-def pad_license_dau(b_time,e_time,group_by_time,index,table_name,if_exists):
+def pad_license_dau(b_time, e_time,group_by_time,index,table_name,if_exists):
     body = '''
     {
       "size": 0,
@@ -309,17 +308,17 @@ def pad_license_dau(b_time,e_time,group_by_time,index,table_name,if_exists):
             },
             {
               "range": {
-                "process_time": {
-                  "gte": "%s",
-                  "lte": "%s"
-                }
-              }
-            },
-            {
-              "range": {
                 "message_type": {
                   "gte": 1,
                   "lte": 100
+                }
+              }
+            },
+           {
+              "range": {
+                "process_time": {
+                  "gte": "%s",
+                  "lte": "%s"
                 }
               }
             },
@@ -355,14 +354,7 @@ def pad_license_dau(b_time,e_time,group_by_time,index,table_name,if_exists):
       }
     }
     ''' % (b_time, e_time,group_by_time)
-    HEADERS = {
-        'Content-Type': 'application/json',
-        'kbn-xsrf': 'true',
-    }
-
-    url = 'http://52.82.30.42:5601/api/console/proxy?path={}/_search&method=POST'.format(index)
-    res = requests.post(url=url, verify='path', auth=('kibana', 'etiantian2018!'), data=body, headers=HEADERS)
-    res = json.loads(res.text)
+    res = es_formal_connect(body,index)
     data = res['aggregations']['group_by_time']['buckets']
     df_list = []
     for i in data:
@@ -387,14 +379,10 @@ if __name__ == '__main__':
     schedule.every(2).hours.do(school_info)
 
     # 学习机活跃度
-    now_time = pd.to_datetime(datetime.datetime.now())
-    b_time = (now_time - pd.to_timedelta(1, unit='d')).strftime("%Y-%m-%d 00:00:00")
-    e_time = now_time.strftime("%Y-%m-%d 00:00:00")
     index = 'message_log'
-    print(b_time)
-    print(e_time)
-    schedule.every().day.at("05:00").do(pad_license_dau,b_time,e_time,'1h',index,'pad_license_dau_h','append')
-    schedule.every().day.at("05:10").do(pad_license_dau,b_time,e_time,'1d',index,'pad_license_dau','append')
+
+    schedule.every().day.at("05:00").do(pad_license_dau,'1h',index,'pad_license_dau_h','append')
+    schedule.every().day.at("05:10").do(pad_license_dau,'1d',index,'pad_license_dau','append')
 
     while True:
         schedule.run_pending()
