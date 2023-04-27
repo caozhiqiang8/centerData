@@ -3,7 +3,7 @@ import json
 import time
 import pandas as pd
 import requests
-from public.db_con import mysql_connect, sqlite_connect, write_Sqlite,es_formal_connect
+from public.db_con import mysql_connect, sqlite_connect, write_Sqlite, es_formal_connect
 from public.df_merge import df_merge
 from public.record_time import cost_time
 from public.school_crm import school_crm
@@ -11,6 +11,7 @@ import threading
 import schedule
 
 task_df_list = []
+
 
 def task_yb(time):
     sql = '''
@@ -263,12 +264,12 @@ def year_province_count():
         data=['台湾', '黑龙江', '内蒙古', "吉林", '北京', "辽宁", "河北", "天津", "山西", "陕西", "甘肃", "宁夏", "青海", "新疆", "西藏", "四川", "重庆",
               "山东", "河南", "江苏", "安徽", "湖北", "浙江", "福建", "江西", "湖南", "贵州", "云南", "广东", "广西", "海南", '上海'],
         columns=['province'])
-    years = {'y22_23_2': ['2023-01-15', '2023-07-15'],'y22_23_1': ['2022-07-15', '2023-01-15'],
-             'y21_22_2': ['2022-01-15', '2022-07-15'],'y21_22_1': ['2021-07-15', '2022-01-15'],
-             'y20_21_2': ['2021-01-15', '2021-07-15'],'y20_21_1': ['2020-07-15', '2021-01-15'],
-             'y19_20_2': ['2020-01-15', '2020-07-15'],'y19_20_1': ['2019-07-15', '2020-01-15'],
-             'y18_19_2': ['2019-01-15', '2019-07-15'],'y18_19_1': ['2018-07-15', '2019-01-15'],
-             'y17_18_2': ['2018-01-15', '2018-07-15'],'y17_18_1': ['2017-07-15', '2018-01-15'],
+    years = {'y22_23_2': ['2023-01-15', '2023-07-15'], 'y22_23_1': ['2022-07-15', '2023-01-15'],
+             'y21_22_2': ['2022-01-15', '2022-07-15'], 'y21_22_1': ['2021-07-15', '2022-01-15'],
+             'y20_21_2': ['2021-01-15', '2021-07-15'], 'y20_21_1': ['2020-07-15', '2021-01-15'],
+             'y19_20_2': ['2020-01-15', '2020-07-15'], 'y19_20_1': ['2019-07-15', '2020-01-15'],
+             'y18_19_2': ['2019-01-15', '2019-07-15'], 'y18_19_1': ['2018-07-15', '2019-01-15'],
+             'y17_18_2': ['2018-01-15', '2018-07-15'], 'y17_18_1': ['2017-07-15', '2018-01-15'],
              }
     sql = '''
         select * from day_school_task 
@@ -291,8 +292,9 @@ def year_province_count():
     year_province_data.clear()
     # return year_province_df
 
+
 @cost_time
-def pad_license_dau(b_time, e_time,group_by_time,index,table_name,if_exists):
+def pad_license_dau(b_time, e_time, group_by_time, index, table_name, if_exists):
     body = '''
     {
       "size": 0,
@@ -353,8 +355,8 @@ def pad_license_dau(b_time, e_time,group_by_time,index,table_name,if_exists):
         }
       }
     }
-    ''' % (b_time, e_time,group_by_time)
-    res = es_formal_connect(body,index)
+    ''' % (b_time, e_time, group_by_time)
+    res = es_formal_connect(body, index)
     data = res['aggregations']['group_by_time']['buckets']
     df_list = []
     for i in data:
@@ -370,21 +372,26 @@ def pad_license_dau(b_time, e_time,group_by_time,index,table_name,if_exists):
 
 if __name__ == '__main__':
 
-    c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
-    # 同步每天学校任务数
-    schedule.every(2).hours.do(day_school_task,c_time)
-    # 计算学年省市学校数
-    schedule.every(2).hours.do(year_province_count)
-    # 学校列表
-    schedule.every(2).hours.do(school_info)
-
-    # 学习机活跃度
-    index = 'message_log'
-
-    schedule.every().day.at("05:00").do(pad_license_dau,'1h',index,'pad_license_dau_h','append')
-    schedule.every().day.at("05:10").do(pad_license_dau,'1d',index,'pad_license_dau','append')
-
     while True:
-        schedule.run_pending()
-        time.sleep(1)
+        now_time = pd.to_datetime(datetime.datetime.now())
+        if  now_time.strftime("%H") >= '04' :
+            c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
+            # 同步每天学校任务数
+            schedule.every(2).hours.do(day_school_task, c_time)
+            # 计算学年省市学校数
+            schedule.every(2).hours.do(year_province_count)
+            # 学校列表
+            schedule.every(2).hours.do(school_info)
 
+            # 学习机活跃度
+            index = 'message_log'
+            b_time = now_time - pd.to_timedelta(1, unit='d')
+            b_time = b_time.strftime("%Y-%m-%d 00:00:00")
+            e_time = now_time.strftime("%Y-%m-%d 00:00:00")
+
+            pad_license_dau(b_time=b_time, e_time=e_time, group_by_time='1h', index=index, table_name='pad_license_dau_h',
+                            if_exists='replace')
+            pad_license_dau(b_time=b_time, e_time=e_time, group_by_time='1d', index=index, table_name='pad_license_dau',
+                            if_exists='replace')
+
+        time.sleep(60*60)

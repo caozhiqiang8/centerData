@@ -187,9 +187,7 @@ var tabs = new Vue({
 
         },
         schoolInfo() {
-            if (this.school_name == '' || this.school_id == '') {
-                console.log('请输入学校名称或id')
-            } else {
+            if (this.school_name != '' || this.school_id != '') {
                 axios.post('/schoolInfo', {'school_name': this.school_name, 'school_id': this.school_id})
                     .then(data => {
                             this.schooldata = data.data.schoolInfo
