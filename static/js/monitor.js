@@ -246,7 +246,7 @@ var monitor = new Vue({
                         this.videoCount = data.data.videoCount
                         console.log(data.data.videoCount)
                         this.loading = false
-                        this.currentPage =1
+                        this.currentPage = 1
                     })
                     .catch(err => (console.log((err))))
             }
@@ -333,6 +333,10 @@ var monitor = new Vue({
             resIdList = resIdList.join(',')
             this.resId = resIdList
 
+        },
+        //缓存列表状态
+        getRowKeys(row) {
+            return row.res_id;
         },
         handleClose(done) {
             this.dialogVisible = false

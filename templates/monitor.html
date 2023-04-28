@@ -187,6 +187,7 @@
                 </div>
 
                 <el-table
+                        :row-key="getRowKeys"
                         style="margin-top: 20px;width: 100%"
                         :data="videoReviewData.slice((currentPage-1)*PageSize,currentPage*PageSize)"
                         border
@@ -200,6 +201,7 @@
 
                 >
                     <el-table-column
+                            reserve-selection="true"
                             type="selection"
                             width="80">
                     </el-table-column>
