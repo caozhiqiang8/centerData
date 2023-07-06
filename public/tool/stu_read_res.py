@@ -13,11 +13,14 @@ def esConnect(index,body):
     return  res
 
 index = "two_month_action_logs"
-mounth = '2023-01'
-b_time = "{}-01 00:00:00".format(mounth)
-e_time = "{}-30 23:59:59".format(mounth)
+mounth = '2023-03'
+# b_time = "{}-01 00:00:00".format(mounth)
+# e_time = "{}-30 23:59:59".format(mounth)
 
-school_id = 51156
+b_time = "2023-03-05 00:00:00"
+e_time = "2023-05-30 23:59:59"
+
+school_id = 100002530
 
 body = '''{
   "query": {

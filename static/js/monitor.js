@@ -37,7 +37,7 @@ var monitor = new Vue({
         // 默认每页显示的条数（可修改）
         PageSize: 25,
         // 个数选择器（可修改）
-        pageSizes: [10, 25, 50, 100, 150, 200],
+        pageSizes: [10, 25, 50, 100, 150, 200,400,600],
 
     },
     methods: {

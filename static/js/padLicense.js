@@ -3,13 +3,13 @@ var padLicense = new Vue({
     delimiters: ['[[', ']]'],
     data: {
         activeName: 'second',
-        pad_license_0:'0',
+        pad_license_0: '0',
         pad_license_1: '0',
         pad_license_8: '0',
         pad_license_7: '0',
         pad_license_sum: '0',
-        firstShow:false,
-        secondShow:true,
+        firstShow: false,
+        secondShow: true,
         padLicense: [],
 
     },
@@ -39,45 +39,47 @@ var padLicense = new Vue({
         getPadLicense() {
             axios.get('/padLicenseInfo')
                 .then(data => {
-                    console.log(data.data.pad_license)
                     this.padLicense = data.data.pad_license
-                    this.pad_license_0 = data.data.pad_license_count[0]
-                    this.pad_license_1 = data.data.pad_license_count[1]
-                    this.pad_license_8 = data.data.pad_license_count[8]
-                    this.pad_license_7 = data.data.pad_license_count[7]
-                    this.pad_license_sum = this.pad_license_0 + this.pad_license_1 + this.pad_license_8 + this.pad_license_7
+                    this.pad_license_0 = data.data.pad_license_count['出库未激活']
+                    this.pad_license_1 = data.data.pad_license_count['未加卡']
+                    this.pad_license_8 = data.data.pad_license_count['B转C']
+                    this.pad_license_7 = data.data.pad_license_count['已激活']
+                    this.pad_license_sum = data.data.pad_license_count['出库未激活'] + data.data.pad_license_count['未加卡'] + data.data.pad_license_count['B转C']  + data.data.pad_license_count['已激活']
+
+                    console.log( this.pad_license_sum)
+
                 })
                 .catch(err => (console.log((err))))
         },
-        getPadLicensePau(){
+        getPadLicensePau() {
             axios.get('/padLicenseDau?res=0')
-                .then(data =>{
+                .then(data => {
                     console.log(data.data)
-                    this.echartsNames = ['活跃次数','活跃人数']
+                    this.echartsNames = ['活跃次数', '活跃人数']
                     this.echartslineX = data.data.data_x
                     this.echartsValue = data.data.data_y
                     this.dataZoomStart = 0
                     this.dataZoomend = 100
-                    this.$options.methods.eycharts(this.echartsNames, this.echartslineX, this.echartsValue,this.dataZoomStart,this.dataZoomend)
+                    this.$options.methods.eycharts(this.echartsNames, this.echartslineX, this.echartsValue, this.dataZoomStart, this.dataZoomend)
 
                 })
-                .catch(err =>(console.log(err)))
+                .catch(err => (console.log(err)))
         },
-        getPadLicensePauH(){
+        getPadLicensePauH() {
             axios.get('/padLicenseDau?res=1')
-                .then(data =>{
+                .then(data => {
                     console.log(data.data)
-                    this.echartsNames = ['活跃次数','活跃人数']
+                    this.echartsNames = ['活跃次数', '活跃人数']
                     this.echartslineX = data.data.data_x
                     this.echartsValue = data.data.data_y
                     this.dataZoomStart = 93
                     this.dataZoomend = 100
-                    this.$options.methods.eycharts(this.echartsNames, this.echartslineX, this.echartsValue,this.dataZoomStart,this.dataZoomend)
+                    this.$options.methods.eycharts(this.echartsNames, this.echartslineX, this.echartsValue, this.dataZoomStart, this.dataZoomend)
 
                 })
-                .catch(err =>(console.log(err)))
+                .catch(err => (console.log(err)))
         },
-        eycharts(echartsNames, echartslineX, echartsValue,dataZoomStart,dataZoomend) {
+        eycharts(echartsNames, echartslineX, echartsValue, dataZoomStart, dataZoomend) {
             var myChart = echarts.init(document.getElementById('main'));
             var charts = {
                 unit: '',

@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 
 if __name__ == '__main__':
-    c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
+    c_time = "and tt.c_time >= '2022-07-15 00:00:00'"
     day_school_task(c_time)
     year_province_count()
     school_info()

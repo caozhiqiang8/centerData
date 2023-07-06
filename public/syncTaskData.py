@@ -377,16 +377,15 @@ if __name__ == '__main__':
         if  now_time.strftime("%H") >= '04' :
             c_time = "and tt.c_time >= '2023-01-15 00:00:00'"
             # 同步每天学校任务数
-            schedule.every(2).hours.do(day_school_task, c_time)
+            day_school_task(c_time)
             # 计算学年省市学校数
-            schedule.every(2).hours.do(year_province_count)
+            year_province_count()
             # 学校列表
-            schedule.every(2).hours.do(school_info)
+            school_info()
 
             # 学习机活跃度
             index = 'message_log'
-            b_time = now_time - pd.to_timedelta(1, unit='d')
-            b_time = b_time.strftime("%Y-%m-%d 00:00:00")
+            b_time = '2023-02-15 00:00:00'
             e_time = now_time.strftime("%Y-%m-%d 00:00:00")
 
             pad_license_dau(b_time=b_time, e_time=e_time, group_by_time='1h', index=index, table_name='pad_license_dau_h',
@@ -395,3 +394,4 @@ if __name__ == '__main__':
                             if_exists='replace')
 
         time.sleep(60*60)
+

@@ -18,7 +18,7 @@ def padLicenseInfo():
         order by active_time  desc 
     '''
     data = mysql_connect(sql)
-    data['state_id'] = data['state_id'].replace([0,1,7,8],['出库未激活','未加卡','已激活',' B转C'])
+    data['state_id'] = data['state_id'].replace([0,1,7,8],['出库未激活','未加卡','已激活','B转C'])
     pad_license_json = json.loads((data.groupby('state_id').count()).to_json())
     pad_license_count = pad_license_json['license_id']
     pad_license = json.loads(data.to_json(orient='records', force_ascii=False))
