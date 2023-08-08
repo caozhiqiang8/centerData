@@ -23,10 +23,11 @@ def userQuery():
             SELECT s.name,s.school_id ,u.ett_user_id,oc.user_name , oc.password,t.teacher_name as real_name ,u.state_id, DATE_FORMAT(u.C_TIME,'%%Y-%%m-%%d %%H:%%i:%%s')  as c_time 
             from  oracle2utf.coschuser_info oc,user_info u,school_info s,teacher_info t
             where  oc.jid = u.ETT_USER_ID and u.DC_SCHOOL_ID = s.school_id and u.ref = t.user_id  
-            and (oc.user_name ='{}'  or oc.jid = '{}' or u.user_id = '{}')
+            and oc.user_name ='{}' 
             '''.format(teaName,teaName,teaName)
             usrInfo = mysql_connect(sql)
             usrInfo = json.loads(usrInfo.to_json(orient='records', force_ascii=False))
+            print(usrInfo)
             data = {
                 'usrInfo': usrInfo,
                 'msg': 'OK'

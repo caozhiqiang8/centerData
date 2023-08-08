@@ -12,6 +12,8 @@ from axp_class import axp_class_blue
 from monitor import monitor_blue
 from exam import exam_blue
 from pad_license import pad_license_blue
+from flask_cors import CORS
+
 
 app = Flask(__name__)
 app.register_blueprint(login_blue)
@@ -72,6 +74,7 @@ def download():
     attachment_filename = 'g10'
     return send_from_directory(dir_path, file_name, attachment_filename='学校G10.xlsx')
 
+CORS(app, resources=r'/*')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

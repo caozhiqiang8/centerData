@@ -65,7 +65,7 @@ def getSchoolTaskCount():
     # 学校作业情况
     if code == '1':
         sql = '''
-        select * from day_school_task  where date >= '2023-01-15'
+        select * from day_school_task  where date >= '2023-07-15'
         order by date
         '''
         task = sqlite_connect(sql)

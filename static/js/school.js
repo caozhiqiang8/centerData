@@ -195,7 +195,6 @@ var tabs = new Vue({
                     )
                     .catch(err => (console.log(err)))
             }
-
         },
         sgSchoolData() {
             if (this.sg_id != '') {

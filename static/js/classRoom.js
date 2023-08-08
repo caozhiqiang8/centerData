@@ -11,7 +11,6 @@ var classRoom = new Vue({
         axpSchoolShow: true,
         axpClassShow: false,
 
-
     },
     methods: {
         handleClick(tab, event) {

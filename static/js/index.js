@@ -18,9 +18,7 @@ var map = new Vue({
         mapEcharts(data) {
             //数据来源：国家统计局，本数据不包含香港，澳门，台湾地区
             var myChart = echarts.init(document.getElementById('main'));
-
             var uploadedDataURL = "static/js/publicJs/data-1528971808162-BkOXf61WX.json";
-
             var geoCoordMap = {
                 '北京': [116.40, 40.40],
                 '天津': [117.04, 39.52],
@@ -55,19 +53,18 @@ var map = new Vue({
                 '新疆': [86.61, 40.79],
             };
 
-
-            var d12 = data.y22_23_2;
-            var d11 = data.y22_23_1;
-            var d10 = data.y21_22_2;
-            var d9 = data.y21_22_1;
-            var d8 = data.y20_21_2;
-            var d7 = data.y20_21_1;
-            var d6 = data.y19_20_2;
-            var d5 = data.y19_20_1;
-            var d4 = data.y18_19_2;
-            var d3 = data.y18_19_1;
-            var d2 = data.y17_18_2;
-            var d1 = data.y17_18_1;
+            var d12 = data.y23_24_1;
+            var d11 = data.y22_23_2;
+            var d10 = data.y22_23_1;
+            var d9 = data.y21_22_2;
+            var d8 = data.y21_22_1;
+            var d7 = data.y20_21_2;
+            var d6 = data.y20_21_1;
+            var d5 = data.y19_20_2;
+            var d4 = data.y19_20_1;
+            var d3 = data.y18_19_2;
+            var d2 = data.y18_19_1;
+            var d1 = data.y17_18_2;
 
 
             var colors = [
@@ -77,7 +74,7 @@ var map = new Vue({
             ];
             var colorIndex = 1;
             $(function () {
-                var year = ["y17_18上", "y17_18下", "y18_19上", "y18_19下", "y19_20上", "y19_20下", "y20_21上", "y20_21下", "y21_22上", "y21_22下", "y22_23上", "y22_23下"];
+                var year = [ "y17_18下", "y18_19上", "y18_19下", "y19_20上", "y19_20下", "y20_21上", "y20_21下", "y21_22上", "y21_22下", "y22_23上", "y22_23下","y23_24上"];
                 var mapData = [
                     [],
                     [],
